@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SweepStatApp</string>
+    <string name="sweep_stat_app">Sweep Stat App</string>
+    <string name="an_image_of_the_sweepstat_version_3_2">An image of the SweepStat version 3–2</string>
+    <string name="new_experiment">New Experiment</string>
+    <string name="load_configuration">Load Configuration</string>
+    <string name="recent_results">Recent Results</string>
+    <string name="check_bluetooth_connection">Check Bluetooth Connection</string>
+    <string name="about">About</string>
+    <string name="credits">Credits</string>
 </resources>
