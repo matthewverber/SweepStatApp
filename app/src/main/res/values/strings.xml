@@ -8,4 +8,9 @@
     <string name="check_bluetooth_connection">Check Bluetooth Connection</string>
     <string name="about">About</string>
     <string name="credits">Credits</string>
+    <string name="run">Run!</string>
+    <string name="export">Export</string>
+    <string name="edit_parameters">Edit Parameters</string>
+    <string name="finish_setup">Finish Setup</string>
+    <string name="simple_setup">Simple Setup</string>
 </resources>
