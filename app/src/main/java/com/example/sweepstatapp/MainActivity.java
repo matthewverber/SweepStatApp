@@ -1,6 +1,8 @@
 package com.example.sweepstatapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View view){
         if(view.getId() == R.id.newExperiment){
+            Intent[] activity = new Intent[1];
+            activity[0] = new Intent(MainActivity.this, graph.class);
+            startActivities(activity);
             // switch to experiment view; consider implementing viewflipper to walk through each
         }
         else if(view.getId() == R.id.loadConfig){
