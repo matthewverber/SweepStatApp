@@ -1,5 +1,8 @@
 package com.example.sweepstatapp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +32,7 @@ public class AdvancedSetup extends AppCompatActivity {
         finish = findViewById(R.id.finishAdvanced);
 
         initialVoltage = findViewById(R.id.initialVoltage);
-        highVoltage = findViewById(R.id.initialVoltage);
+        highVoltage = findViewById(R.id.highVoltage);
         lowVoltage = findViewById(R.id.lowVoltage);
         finalVoltage = findViewById(R.id.finalVoltage);
         polarityToggle = findViewById(R.id.polarity);
@@ -46,12 +49,7 @@ public class AdvancedSetup extends AppCompatActivity {
         polarityToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!b) {  // Polarity will be positive
-                    polarity = true;
-                }
-                else {  // Polarity will be negative
-                    polarity = false;
-                }
+                polarity = !b;
             }
         });
         if(getSupportActionBar() != null){
@@ -61,19 +59,39 @@ public class AdvancedSetup extends AppCompatActivity {
 
     public void verifyEntries(View view){
         try{
-            double initialV = Double.parseDouble(initialVoltage.getText().toString());
-            double highV = Double.parseDouble(highVoltage.getText().toString());
-            double lowV = Double.parseDouble(lowVoltage.getText().toString());
-            double finalV = Double.parseDouble(finalVoltage.getText().toString());
-            double scanrate = Double.parseDouble(scanRate.getText().toString());
-            double segments = Double.parseDouble(sweepSegs.getText().toString());
-            double interval = Double.parseDouble(sweepSegs.getText().toString());
-            double quiettime = Double.parseDouble(quietTime.getText().toString());
-            double sens = Double.parseDouble(sensitivity.getSelectedItem().toString());
+            String initialV = (initialVoltage.getText().toString());
+            String highV = (highVoltage.getText().toString());
+            String lowV = (lowVoltage.getText().toString());
+            String finalV = (finalVoltage.getText().toString());
+            String polarity = polarityToggle.getText().toString();
+            String scanrate = (scanRate.getText().toString());
+            String segments = (sweepSegs.getText().toString());
+            String interval = (sampleInterval.getText().toString());
+            String quiettime = (quietTime.getText().toString());
+            String sens = (sensitivity.getSelectedItem().toString());
             boolean isAuto = isAutoSens.isChecked();
             boolean isFinal = isFinalE.isChecked();
             boolean isAux = isAuxRecording.isChecked();
-            // save parameters back over to main activity OR runtime activity
+
+            SharedPreferences saved = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
+            SharedPreferences.Editor saver = saved.edit();
+            saver.putString(ExperimentRuntime.INITIAL_VOLTAGE, initialV);
+            saver.putString("highVoltage", highV);
+            saver.putString("lowVoltage", lowV);
+            saver.putString("finalVoltage", finalV);
+            saver.putString("polarity", polarity);
+            saver.putString("scanRate", scanrate);
+            saver.putString("scanSegments", segments);
+            saver.putString("sampleInterval", interval);
+            saver.putString("quietTime", quiettime);
+            saver.putString("sensitivity", sens);
+            saver.putBoolean("isAutoSens", isAuto);
+            saver.putBoolean("isFinalE", isFinal);
+            saver.putBoolean("isAuxRecording", isAux);
+            saver.apply();
+            Intent goToRuntime = new Intent(this, ExperimentRuntime.class);
+            startActivity(goToRuntime);
+//            this.finish();
         } catch (Exception e){
             e.printStackTrace();
             Toast.makeText(this, "Please make entries for all parameters!", Toast.LENGTH_SHORT).show();

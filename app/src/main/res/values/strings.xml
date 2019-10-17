@@ -33,4 +33,9 @@
     <string name="go_home">Go Home</string>
     <string name="sensitivity">Sensitivity: </string>
     <string name="a_v">A/V</string>
+    <string name="loading">Loading…</string>
+    <string name="auto_sens_is_enabled">Auto Sens is Enabled</string>
+    <string name="final_voltage_is_enabled">Final Voltage is Enabled</string>
+    <string name="auxiliary_signal_recording_is_enabled">Auxiliary Signal Recording is Enabled</string>
+    <string name="back">Back…</string>
 </resources>
