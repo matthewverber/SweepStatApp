@@ -1,7 +1,6 @@
 package com.example.sweepstatapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -10,6 +9,13 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    /* When the app is started, the onCreate method will create the application's splash screen
+     * and will default to the main load screen content view. In future versions, this must be
+     * updated to include the permission to share data prompt on the first launch, then ignored
+     * on subsequent launches. Currently, the app defaults to the main menu, with limited
+     * functionality for the purposes of the walking skeleton.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,28 +25,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Method onClick is used for all buttons in the app
-    // The first line acquires the integer ID of the button pressed
-    // The method then checks what button was pressed and runs its code accordingly
+    /* Method onClick is used for all buttons on the main screen of the app
+     * The method first acquires the integer ID of the button pressed
+     * The method then checks what button was pressed and runs its code accordingly
+     * In the cases of any navigation buttons this will change views accordingly
+     * In the case of configurations this will open a new intent displaying options
+     */
 
     public void onClick(View view){
+
         int id = view.getId();
+
         if(id == R.id.newExperiment){
             // First, set view to setup -- currently only implementing advanced setup
-            setContentView(R.layout.advanced_setup);
-        }
-        else if(id == R.id.loadConfig){
-            // open config loader, can be new intent and return to initial or experiment view
-        }
-        else if(id == R.id.recentResults){
-            // open recent results list -- find out how to save results locally
+            Intent setup_advanced = new Intent(this, AdvancedSetup.class);
+            startActivity(setup_advanced);
         }
 
-        // Checks if SweepStat bluetooth device is connected
-        // TODO find out what bluetooth device signature sweepstat lem will register as
+        else if(id == R.id.loadConfig){
+            // open config loader, can be new intent and return to initial or experiment view
+            // not complete for walking skeleton
+        }
+
+        else if(id == R.id.recentResults){
+            // open recent results list -- find out how to save results locally
+            // not complete for walking skeleton
+        }
+
+
         else if(id == R.id.ckBluetooth){
-            //This if checker should be something along the lines of BluetoothManager.getIsItemConnected(BLUETOOTH.TYPE)
-            //In order to do this properly, we need to find out what type of device the LEM will register as
+            // This if statement should be something along the lines of BluetoothManager.getIsItemConnected(BLUETOOTH.whateverthesweepstatis)
+            // In order to do this properly, we need to find out what type of device the LEM will register as
             if(false){
                 Toast.makeText(this, "Device is already connected!", Toast.LENGTH_SHORT).show();
             }
@@ -56,12 +71,6 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(id == R.id.credits){
             // not complete for walking skeleton
-        }
-        else if(id == R.id.finishAdvanced) {
-            // must first check that all fields have been correctly entered
-            // then pass parameters preferably to a locally saved params file
-            // then must set layout to experiment_runtime
-
         }
     }
 }

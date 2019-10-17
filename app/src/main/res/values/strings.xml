@@ -13,4 +13,24 @@
     <string name="edit_parameters">Edit Parameters</string>
     <string name="finish_setup">Finish Setup</string>
     <string name="simple_setup">Simple Setup</string>
+    <string name="initial_voltage">Initial Voltage:</string>
+    <string name="v">V</string>
+    <string name="enable_auxiliary_signal_recording">Enable Auxiliary Signal Recording</string>
+    <string name="high_voltage">High Voltage:</string>
+    <string name="final_voltage">Final Voltage:</string>
+    <string name="auto_sens"><![CDATA[Auto Sens if Scan Rate <= 0.01 V/s]]></string>
+    <string name="enable_final_voltage">Enable Final Voltage</string>
+    <string name="v_s">V/s</string>
+    <string name="scan_rate">Scan Rate:</string>
+    <string name="negative">Negative</string>
+    <string name="positive">Positive</string>
+    <string name="low_voltage">Low Voltage:</string>
+    <string name="initial_polarity">Initial Polarity:</string>
+    <string name="sweep_segments">Sweep Segments:</string>
+    <string name="sample_interval">Sample Interval:</string>
+    <string name="quiet_time">Quiet Time:</string>
+    <string name="seconds">seconds</string>
+    <string name="go_home">Go Home</string>
+    <string name="sensitivity">Sensitivity: </string>
+    <string name="a_v">A/V</string>
 </resources>

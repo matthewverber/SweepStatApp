@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Sensitivity_prompt">Select sensitivity...</string>
+
+    <string-array name="sensitivity_options">
+        <item> 0.00000001 </item>
+        <item> 0.0000001  </item>
+        <item> 0.000001   </item>
+        <item> 0.00001    </item>
+        <item> 0.0001     </item>
+        <item> 0.001      </item>
+        <item> 0.01       </item>
+    </string-array>
+</resources>
