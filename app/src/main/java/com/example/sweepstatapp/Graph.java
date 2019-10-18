@@ -5,7 +5,6 @@ import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.GraphView;
-import android.view.View;
 import java.util.ArrayList;
 
 
@@ -13,7 +12,9 @@ public class Graph {
     private LineGraphSeries<DataPoint> forwardSeries = new LineGraphSeries<>();
     private LineGraphSeries<DataPoint> backwardSeries = new LineGraphSeries<>();
     private int numberOfPoints = 100;
+    private ArrayList<DataPoint> forwardData = new ArrayList<>();
     private ArrayList<DataPoint> backwardData = new ArrayList<>();
+    private ArrayList<DataPoint> fullData = new ArrayList<>();
     private int x = 0;
     private double offset = 0;
     private long interval = 50;
@@ -83,11 +84,28 @@ public class Graph {
 
     public void addEntry(DataPoint data){
         this.dataPoint = data;
+        fullData.add(data);
         if(dataPoint.getX() < forwardSeries.getHighestValueX()) {
             backwardData.add(0,dataPoint);
             backwardSeries.resetData(backwardData.toArray(new DataPoint[0]));
         } else {
+            forwardData.add(dataPoint);
             forwardSeries.appendData(dataPoint, false, numberOfPoints);
         }
+    }
+
+    public ArrayList<DataPoint> getForwardData(){
+        return forwardData;
+    }
+
+    public ArrayList<DataPoint> getBackwardData(){
+        ArrayList<DataPoint> reversedData = new ArrayList<>();
+        for (int i = backwardData.size()-1; i >= 0; i++)
+            reversedData.add(backwardData.get(i));
+        return reversedData;
+    }
+
+    public ArrayList<DataPoint> getFullData(){
+        return fullData;
     }
 }
