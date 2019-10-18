@@ -1,5 +1,7 @@
 package com.example.sweepstatapp;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -10,15 +12,16 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
+
 public class MainActivity extends AppCompatActivity {
 
+    private BluetoothAdapter mBTAdapter;
 
-    /* When the app is started, the onCreate method will create the application's splash screen
-     * and will default to the main load screen content view. In future versions, this must be
-     * updated to include the permission to share data prompt on the first launch, then ignored
-     * on subsequent launches. Currently, the app defaults to the main menu, with limited
-     * functionality for the purposes of the walking skeleton.
-     */
+    // #defines for identifying shared types between calling functions
+    private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,14 +30,48 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         SharedPreferences prefs = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
+
+        mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
+        if (mBTAdapter == null) {
+            Toast.makeText(getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
+            // TODO: Device doesn't support Bluetooth
+            // TODO: else assign action to "RUN" experiment button
+        }
     }
 
-    /* Method onClick is used for all buttons on the main screen of the app
-     * The method first acquires the integer ID of the button pressed
-     * The method then checks what button was pressed and runs its code accordingly
-     * In the cases of any navigation buttons this will change views accordingly
-     * In the case of configurations this will open a new intent displaying options
-     */
+    private void bluetoothOn(View view){
+        if (!mBTAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            //mBluetoothStatus.setText("Bluetooth enabled");
+            Toast.makeText(getApplicationContext(),"Bluetooth turned on",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"Bluetooth is already on", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Enter here after user selects "yes" or "no" to enabling radio
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent Data){
+        // Check which request we're responding to
+        if (requestCode == REQUEST_ENABLE_BT) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                ///mBluetoothStatus.setText("Enabled");
+            }
+            //else
+                //mBluetoothStatus.setText("Disabled");
+        }
+    }
+
+    private void bluetoothOff(View view){
+        mBTAdapter.disable(); // turn off
+        //mBluetoothStatus.setText("Bluetooth disabled");
+        Toast.makeText(getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
+    }
 
     public void onClick(View view){
 
@@ -59,25 +96,16 @@ public class MainActivity extends AppCompatActivity {
             Intent loadData = new Intent(this, LoadData.class);
             startActivity(loadData);
         }
-
-
-        else if(id == R.id.ckBluetooth){
-            // This if statement should be something along the lines of BluetoothManager.getIsItemConnected(BLUETOOTH.whateverthesweepstatis)
-            // In order to do this properly, we need to find out what type of device the LEM will register as
-            if(false){
-                Toast.makeText(this, "Device is already connected!", Toast.LENGTH_SHORT).show();
-            }
-            // If LEM is not connected, pressing the button jumps to the device's bluetooth settings
-            else{
-                Intent openBluetooth = new Intent();
-                openBluetooth.setAction(Settings.ACTION_BLUETOOTH_SETTINGS);
-                startActivity(openBluetooth);
-            }
+        else if(view.getId() == R.id.ckBluetooth){
+            //Toast.makeText(getApplicationContext(),"check bluetooth", Toast.LENGTH_SHORT).show();
+            // probably toast if correct, else launch intent to settings -> bluetooth
+            Intent intent = new Intent(this, DeviceListActivity.class);
+            startActivity(intent);
         }
-        else if(id == R.id.about){
-            // not complete for walking skeleton
+        else if(view.getId() == R.id.about){
+            // not ocmplete for walking skeleton
         }
-        else if(id == R.id.credits){
+        else if(view.getId() == R.id.credits){
             // not complete for walking skeleton
         }
     }
