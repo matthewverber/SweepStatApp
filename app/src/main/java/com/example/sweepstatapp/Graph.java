@@ -17,8 +17,8 @@ public class Graph {
     private int x = 0;
     private double offset = 0;
     private long interval = 50;
-    private GraphView graph = null;
-    private Viewport viewport = null;
+    private GraphView graph;
+    private Viewport viewport;
     private DataPoint dataPoint = null;
 
     public Graph(GraphView graph, Viewport viewport){
@@ -41,7 +41,6 @@ public class Graph {
             graph.addSeries(backwardSeries);
             viewport.setMaxX(numberOfPoints*0.1);
             graphInRealTime();
-//        }
     }
 
     protected DataPoint generateFakeDataPoint() {
