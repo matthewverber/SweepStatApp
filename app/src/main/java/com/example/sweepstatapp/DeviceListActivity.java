@@ -51,25 +51,21 @@ public class DeviceListActivity extends AppCompatActivity {
         // Get a set of currently paired devices
         //Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
-        // Register for broadcasts when a device is discovered.
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        this.registerReceiver(mReceiver, filter);
-
-        // Register for broadcasts when discovery has finished
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        this.registerReceiver(mReceiver, filter);
+        // Register for broadcasts
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        registerReceiver(mReceiver, filter);
 
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // request permissions
-        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
+        int PERMISSION_ALL  = 1;
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                PERMISSION_ALL );
 
         doDiscovery();
         // TODO: Get a set of currently paired devices
@@ -87,7 +83,7 @@ public class DeviceListActivity extends AppCompatActivity {
         }
 
         // Unregister broadcast listeners
-        // this.unregisterReceiver(mReceiver);
+        this.unregisterReceiver(mReceiver);
     }
 
     /**
@@ -142,11 +138,11 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Log.d(TAG, "BroadcastReceiver called");
-
+            Log.d(TAG, "onReceive intent: " + action);
 
             // When discovery finds a device
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -165,6 +161,7 @@ public class DeviceListActivity extends AppCompatActivity {
                 // if (mNewDevicesArrayAdapter.getCount() == 0) {
 
                 Toast.makeText(getApplicationContext(),"Bluetooth discovery finished",Toast.LENGTH_SHORT).show();
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
             }
         }
     };
