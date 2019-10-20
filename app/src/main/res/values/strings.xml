@@ -8,4 +8,15 @@
     <string name="check_bluetooth_connection">Check Bluetooth Connection</string>
     <string name="about">About</string>
     <string name="credits">Credits</string>
+
+
+    <!-- strings for activity_device_list.xml and DeviceListActivity.java -->
+
+    <string name="title_currently_connected">Currently Connected</string>
+    <string name="message_no_device">No device connected</string>
+    <string name="message_bt_off">Bluetooth is not turned on</string>
+    <string name="message_no_bt">Bluetooth not supported</string>
+
+    <string name="title_available_devices">Available Devices</string>
+
 </resources>

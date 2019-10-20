@@ -24,6 +24,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBtAdapter;
 
+    private TextView mCurrentlyConnectedTextView;
     private ArrayAdapter<String> mAvailableDevicesArrayAdapter;
     // TODO: mPreviouslyConnectedDevicesArrayAdapter;
 
@@ -34,32 +35,43 @@ public class DeviceListActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(),"opening devicelistactivity",Toast.LENGTH_SHORT).show();
 
-        // prompt user to enable bluetooth.
+        // Get the local Bluetooth adapter
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        // if no bluetooth, the put message saying no bluetooth found
+        // Initialize currently connected
+        mCurrentlyConnectedTextView = findViewById(R.id.currently_connected);
+
+        // set the text for current status message
+        if(mBtAdapter == null) {
+            mCurrentlyConnectedTextView.setText(R.string.message_no_bt);
+            // TODO: skip rest of code that isn't necessary
+        } else if(!mBtAdapter.isEnabled()) {
+            mCurrentlyConnectedTextView.setText(R.string.message_bt_off);
+            // TODO: use ACTION_REQUEST_ENABLE intent to turn on bluetooth
+        } else {
+            mCurrentlyConnectedTextView.setText(R.string.message_no_device);
+        }
 
         // TODO: button to refresh device discovery
 
         // Initialize array adapters.
         mAvailableDevicesArrayAdapter = new ArrayAdapter<>(this, R.layout.device_name);
-
         // Find and set up the ListView for available devices
-        ListView availableDevicesListView  = findViewById(R.id.available_devices);
-        availableDevicesListView .setAdapter(mAvailableDevicesArrayAdapter);
-        availableDevicesListView .setOnItemClickListener(mDeviceClickListener);
+        ListView availableDevicesListView = findViewById(R.id.available_devices);
+        availableDevicesListView.setAdapter(mAvailableDevicesArrayAdapter);
+        availableDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
         // Get a set of currently paired devices
         //Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
         // Register for broadcasts
+        // TODO: add intents for all bluetooth status changes, etc
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         registerReceiver(mReceiver, filter);
 
-        // Get the local Bluetooth adapter
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // request permissions
         int PERMISSION_ALL  = 1;
