@@ -72,4 +72,15 @@
     <string name="scan_rate_simple">Scan Rate</string>
     <string name="excellent_finalize">Excellent! We are now ready to make the measurement. If you have not done so already, please place the counter/reference electrode in the solution and connect the black clip. Then, place the working electrode in the solution and connect the red clip. It is important to place these electrodes in the solution before connecting the clips to reduce the likelihood of static discharge damaging the electrodes.</string>
     <string name="save_locally">Save Locally</string>
+
+
+    <!-- strings for activity_device_list.xml and DeviceListActivity.java -->
+
+    <string name="title_currently_connected">Currently Connected</string>
+    <string name="message_no_device">No device connected</string>
+    <string name="message_bt_off">Bluetooth is not turned on</string>
+    <string name="message_no_bt">Bluetooth not supported</string>
+
+    <string name="title_available_devices">Available Devices</string>
+
 </resources>
