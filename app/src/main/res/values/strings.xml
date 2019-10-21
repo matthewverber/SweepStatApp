@@ -79,7 +79,7 @@
     <string name="title_currently_connected">Currently Connected</string>
     <string name="message_no_device">No device connected</string>
     <string name="message_bt_off">Bluetooth is not turned on</string>
-    <string name="message_no_bt">Bluetooth not supported</string>
+    <string name="message_no_bt">Bluetooth not supported on your device</string>
 
     <string name="title_available_devices">Available Devices</string>
 
