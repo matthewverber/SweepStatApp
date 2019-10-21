@@ -23,6 +23,8 @@ public class DeviceListActivity extends AppCompatActivity {
     private static final String TAG = "DeviceListActivity";
 
     private BluetoothAdapter mBtAdapter;
+    private static final int REQUEST_ENABLE_BT = 22;
+
 
     private TextView mCurrentlyConnectedTextView;
     private ArrayAdapter<String> mAvailableDevicesArrayAdapter;
@@ -44,10 +46,14 @@ public class DeviceListActivity extends AppCompatActivity {
         // set the text for current status message
         if(mBtAdapter == null) {
             mCurrentlyConnectedTextView.setText(R.string.message_no_bt);
-            // TODO: skip rest of code that isn't necessary
-        } else if(!mBtAdapter.isEnabled()) {
+            return;
+        }
+
+        if(!mBtAdapter.isEnabled()) {
             mCurrentlyConnectedTextView.setText(R.string.message_bt_off);
-            // TODO: use ACTION_REQUEST_ENABLE intent to turn on bluetooth
+            // Requesting user permission to enable Bluetooth
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
             mCurrentlyConnectedTextView.setText(R.string.message_no_device);
         }
@@ -62,27 +68,42 @@ public class DeviceListActivity extends AppCompatActivity {
         availableDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
         // Get a set of currently paired devices
+        // TODO: Get and add the set of previously paired devices
         //Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
         // Register for broadcasts
-        // TODO: add intents for all bluetooth status changes, etc
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        // TODO: add intents for all bluetooth status changes, etc
         registerReceiver(mReceiver, filter);
 
-
-        // request permissions
+        // Request permissions
         int PERMISSION_ALL  = 1;
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
                 PERMISSION_ALL );
 
         doDiscovery();
-        // TODO: Get a set of currently paired devices
-        //Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-        // TODO: add each paired sweep stat device to "already paired" list.
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == RESULT_OK) {
+                // Request granted - bluetooth is turning on...
+                // TODO: empty the lists?
+                mCurrentlyConnectedTextView.setText(R.string.message_no_device);
+                doDiscovery();
+            }
+            if (resultCode == RESULT_CANCELED) {
+                // Request denied by user, or an error was encountered while
+                // attempting to enable bluetooth
+                mCurrentlyConnectedTextView.setText(R.string.message_bt_off);
+            }
+        }
     }
 
     @Override
@@ -104,7 +125,7 @@ public class DeviceListActivity extends AppCompatActivity {
     private void doDiscovery() {
         Log.d(TAG, "doDiscovery()");
 
-        // Indicate scanning in the title
+        // TODO: Indicate scanning in the title
         //setProgressBarIndeterminateVisibility(true);
         //setTitle(R.string.scanning);
 
@@ -118,7 +139,6 @@ public class DeviceListActivity extends AppCompatActivity {
 
         // Request discover from BluetoothAdapter
         mBtAdapter.startDiscovery();
-        Log.d(TAG, "discovering = " + mBtAdapter.isDiscovering());
     }
 
     /**
@@ -133,7 +153,6 @@ public class DeviceListActivity extends AppCompatActivity {
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
             Toast.makeText(getApplicationContext(),address,Toast.LENGTH_SHORT).show();
-
 /*
             // Create the result Intent and include the MAC address
             Intent intent = new Intent();
