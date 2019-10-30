@@ -21,6 +21,7 @@ public class Graph {
     private GraphView graph;
     private Viewport viewport;
     private DataPoint dataPoint = null;
+    private boolean reverse = false;
 
     public Graph(GraphView graph, Viewport viewport){
         this.graph = graph;
@@ -40,7 +41,7 @@ public class Graph {
             backwardSeries = new LineGraphSeries<>();
             graph.addSeries(forwardSeries);
             graph.addSeries(backwardSeries);
-            viewport.setMaxX(numberOfPoints*0.1);
+//            viewport.setMaxX(numberOfPoints*0.1);
             graphInRealTime();
     }
 
@@ -86,6 +87,13 @@ public class Graph {
         this.dataPoint = data;
         fullData.add(data);
         if(dataPoint.getX() < forwardSeries.getHighestValueX()) {
+            if (!reverse){
+                reverse = true;
+                LineGraphSeries<DataPoint> connect = new LineGraphSeries<>();
+                connect.appendData(dataPoint, false, 2);
+                connect.appendData(forwardData.get(forwardData.size()-1), false, 2);
+                graph.addSeries(connect);
+            }
             backwardData.add(0,dataPoint);
             backwardSeries.resetData(backwardData.toArray(new DataPoint[0]));
         } else {

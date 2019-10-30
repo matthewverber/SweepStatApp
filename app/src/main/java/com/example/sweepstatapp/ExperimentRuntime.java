@@ -36,7 +36,12 @@ public class ExperimentRuntime extends AppCompatActivity {
         viewport.setXAxisBoundsManual(true);
         viewport.setMinY(-1);
         viewport.setMaxY(1);
-        viewport.setMinX(0);
+        viewport.setMinX(-1);
+        viewport.setMaxX(1);
+        viewport.setScalable(true);
+        viewport.setScalableY(true);
+        viewport.setScrollable(true);
+        viewport.setScrollableY(true);
         graph = new Graph(graphView, viewport);
 
         initialVoltage = findViewById(R.id.initialVoltage);
