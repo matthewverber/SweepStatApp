@@ -38,6 +38,12 @@
     <string name="final_voltage_is_enabled">Final Voltage is Enabled</string>
     <string name="auxiliary_signal_recording_is_enabled">Auxiliary Signal Recording is Enabled</string>
     <string name="back">Back…</string>
+    <string name="sweepstat_experimental_assistant_image">SweepStat Experimental Assistant image</string>
+    <string name="simple_setup_welcome">Welcome to the SweepStat Experimental Assistant. The goal of this assistant is to provide an educational experience to deepen your understanding of the parameters involved in making electrochemical measurements. If you are an advanced user, you may return to the home screen and select “Run Advanced Experiment” to directly enter parameters without educational commentary. Otherwise, press next to get started.</string>
+    <string name="next">Next...</string>
+    <string name="assistant_for">This assistant is best used for investigating the electrochemical response of outer-sphere electrochemical reactions where the voltammograms will take one of two possible shapes:</string>
+    <string name="current_versus_potential_explained">Here, the current (I) resulting from the reaction of a molecule with the electrode surface is plotted against the potential (E). It is clear from this plot that one must exceed a certain potential in order to drive the current-producing reaction. There are two main regions of each voltammogram, the kinetically limited region and the mass transfer limited region, both of which are manifested at different potentials.</string>
+    <string name="sample_caption">Sample graphs to provide examples of limiting factors for voltammograms</string>
 
 
     <!-- strings for activity_device_list.xml and DeviceListActivity.java -->

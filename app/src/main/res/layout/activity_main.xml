@@ -11,6 +11,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/sweep_stat_app"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#000000"
@@ -47,14 +48,13 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="158dp"
         android:layout_height="38dp"
-        android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/load_configuration"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newExperiment" />
+        app:layout_constraintTop_toBottomOf="@+id/simpleSetup" />
 
     <Button
         android:id="@+id/recentResults"
@@ -107,5 +107,16 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ckBluetooth" />
+
+    <Button
+        android:id="@+id/simpleSetup"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/simple_setup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newExperiment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
