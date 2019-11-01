@@ -8,12 +8,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/sweeplogo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/sweeplogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".graph"></activity>
+        <activity android:name=".Graph"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AdvancedSetup"/>
+        <activity android:name=".GuidedSetup"/>
         <activity android:name=".ExperimentRuntime"/>
     </application>
 

@@ -11,6 +11,8 @@
         android:id="@+id/paramsContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -309,7 +311,7 @@
 
             <CheckBox
                 android:id="@+id/isAuxSignalRecording"
-                android:layout_width="match_parent"
+                android:layout_width="375dp"
                 android:layout_height="wrap_content"
                 android:text="@string/enable_auxiliary_signal_recording" />
 
@@ -318,15 +320,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/switchToSimple"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="switchToSimple"
-                    android:text="@string/simple_setup" />
 
                 <Button
                     android:id="@+id/goHome"
@@ -342,6 +335,7 @@
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:onClick="verifyEntries"
                     android:text="@string/finish_setup" />
 

@@ -98,11 +98,6 @@ public class AdvancedSetup extends AppCompatActivity {
         }
     }
 
-    public void switchToSimple(View view){
-        this.finish();
-        //For final version, code in the switching to and inclusion of the simple setup
-    }
-
     public void close(View view){
         this.finish();
     }

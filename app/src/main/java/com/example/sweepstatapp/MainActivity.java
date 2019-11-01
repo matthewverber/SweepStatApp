@@ -77,5 +77,10 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.credits){
             // not complete for walking skeleton
         }
+        else if(id == R.id.simpleSetup){
+            Intent guided_setup = new Intent(this, GuidedSetup.class);
+            startActivity(guided_setup);
+
+        }
     }
 }
