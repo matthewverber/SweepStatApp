@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         SharedPreferences prefs = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
-
     }
 
     /* Method onClick is used for all buttons on the main screen of the app
