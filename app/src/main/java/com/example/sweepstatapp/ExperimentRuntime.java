@@ -1,6 +1,7 @@
 package com.example.sweepstatapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.series.DataPoint;
 
 public class ExperimentRuntime extends AppCompatActivity {
     TextView initialVoltage, highVoltage, lowVoltage, finalVoltage, polarity, scanRate,
@@ -114,6 +116,18 @@ public class ExperimentRuntime extends AppCompatActivity {
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){
            graph.drawOnFakeData(numOfPoints);
+        } else if (view.getId() == R.id.exportRes) {
+            DataPoint[] dataPoint = graph.getFullData().toArray(new DataPoint[0]);
+            double[] voltage = new double[dataPoint.length];
+            double[] current = new double[dataPoint.length];
+            for (int i = 0; i < dataPoint.length; i++){
+                voltage[i] = dataPoint[i].getX();
+                current[i] = dataPoint[i].getY();
+            }
+            Intent export = new Intent(this, Export.class);
+            export.putExtra("voltage", voltage);
+            export.putExtra("current", current);
+            startActivity(export);
         }
     }
 

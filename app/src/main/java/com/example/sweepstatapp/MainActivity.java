@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        //SharedPreferences prefs = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
+        SharedPreferences prefs = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
 
     }
 
