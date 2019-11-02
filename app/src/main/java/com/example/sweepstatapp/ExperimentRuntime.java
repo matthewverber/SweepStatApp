@@ -18,7 +18,6 @@ public class ExperimentRuntime extends AppCompatActivity {
     sampleInterval, sensitivity, sweepSegments;
     Boolean autoSens, finalE, auxRecord;
     String loadFailed = "Not currently enabled";
-    static final String INITIAL_VOLTAGE = "INITIAL VOLTAGE";
     private Graph graph = null;
     private int numOfPoints = 100;
     SharedPreferences saved;
@@ -56,51 +55,20 @@ public class ExperimentRuntime extends AppCompatActivity {
         autoSens = false;
         finalE = false;
         auxRecord = false;
-
-
         if(saved != null){
-            initialVoltage.setText(saved.getString(INITIAL_VOLTAGE, loadFailed));
-            highVoltage.setText(saved.getString("highVoltage", loadFailed));
-            lowVoltage.setText(saved.getString("lowVoltage", loadFailed));
-            finalVoltage.setText(saved.getString("finalVoltage", loadFailed));
-            polarity.setText(saved.getString("polarity", loadFailed));
-            scanRate.setText(saved.getString("scanRate", loadFailed));
-            sweepSegments.setText(saved.getString("scanSegments", loadFailed));
-            sampleInterval.setText(saved.getString("sampleInterval", loadFailed));
-//          quietTime.setText(saved.getString("quietTime", loadFailed));
-            sensitivity.setText(saved.getString("sensitivity", loadFailed) + "A/V");
-            autoSens = saved.getBoolean("isAutoSens", false);
-            finalE = saved.getBoolean("isFinalE", true);
-            auxRecord = saved.getBoolean("isAuxRecording", false);
-            if(autoSens)
-                findViewById(R.id.autoSensEnabled).setVisibility(View.VISIBLE);
-            if(finalE)
-                findViewById(R.id.finalEEnabled).setVisibility(View.VISIBLE);
-            if(auxRecord)
-                findViewById(R.id.auxRecordingEnabled).setVisibility(View.VISIBLE);
-        } else {
-            Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(saved != null){
-            initialVoltage.setText(saved.getString(INITIAL_VOLTAGE, loadFailed));
-            highVoltage.setText(saved.getString("highVoltage", loadFailed));
-            lowVoltage.setText(saved.getString("lowVoltage", loadFailed));
-            finalVoltage.setText(saved.getString("finalVoltage", loadFailed));
-            polarity.setText(saved.getString("polarity", loadFailed));
-            scanRate.setText(saved.getString("scanRate", loadFailed));
-            sweepSegments.setText(saved.getString("scanSegments", loadFailed));
-            sampleInterval.setText(saved.getString("sampleInterval", loadFailed));
-//          quietTime.setText(saved.getString("quietTime", loadFailed));
-            sensitivity.setText(saved.getString("sensitivity", loadFailed));
-            autoSens = saved.getBoolean("isAutoSens", false);
-            finalE = saved.getBoolean("isFinalE", true);
-            auxRecord = saved.getBoolean("isAuxRecording", false);
+            initialVoltage.setText(saved.getString(AdvancedSetup.INITIAL_VOLTAGE, loadFailed));
+            highVoltage.setText(saved.getString(AdvancedSetup.HIGH_VOLTAGE, loadFailed));
+            lowVoltage.setText(saved.getString(AdvancedSetup.LOW_VOLTAGE, loadFailed));
+            finalVoltage.setText(saved.getString(AdvancedSetup.FINAL_VOLTAGE, loadFailed));
+            polarity.setText(saved.getString(AdvancedSetup.POLARITY_TOGGLE, loadFailed));
+            scanRate.setText(saved.getString(AdvancedSetup.SCAN_RATE, loadFailed));
+            sweepSegments.setText(saved.getString(AdvancedSetup.SWEEP_SEGS, loadFailed));
+            sampleInterval.setText(saved.getString(AdvancedSetup.SAMPLE_INTEVAL, loadFailed));
+            quietTime.setText(saved.getString(AdvancedSetup.QUIET_TIME, loadFailed));
+            sensitivity.setText(saved.getString(AdvancedSetup.SENSITIVITY, loadFailed));
+            autoSens = saved.getBoolean(AdvancedSetup.IS_AUTOSENS, false);
+            finalE = saved.getBoolean(AdvancedSetup.IS_FINALE, true);
+            auxRecord = saved.getBoolean(AdvancedSetup.IS_AUX_RECORDING, false);
             if(autoSens)
                 findViewById(R.id.autoSensEnabled).setVisibility(View.VISIBLE);
             if(finalE)
@@ -111,7 +79,6 @@ public class ExperimentRuntime extends AppCompatActivity {
             Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){

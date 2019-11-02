@@ -22,6 +22,19 @@ public class AdvancedSetup extends AppCompatActivity {
     EditText initialVoltage, highVoltage, lowVoltage, finalVoltage, scanRate, sweepSegs, sampleInterval;
     CheckBox isAutoSens, isFinalE, isAuxRecording;
     Boolean polarity;
+    public static final String INITIAL_VOLTAGE = "INITIAL VOLTAGE";
+    public static final String HIGH_VOLTAGE = "highVoltage";
+    public static final String LOW_VOLTAGE = "lowVoltage";
+    public static final String FINAL_VOLTAGE = "finalVoltage";
+    public static final String POLARITY_TOGGLE = "polarityToggle";
+    public static final String SCAN_RATE = "scanRate";
+    public static final String SWEEP_SEGS = "sweepSegs";
+    public static final String SAMPLE_INTEVAL = "sampleInterval";
+    public static final String QUIET_TIME = "quietTime";
+    public static final String SENSITIVITY = "sensitivity";
+    public static final String IS_AUTOSENS = "isAutoSens";
+    public static final String IS_FINALE = "isFinalE";
+    public static final String IS_AUX_RECORDING = "isAuxRecording";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,22 +89,20 @@ public class AdvancedSetup extends AppCompatActivity {
             }
             SharedPreferences saved = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
             SharedPreferences.Editor saver = saved.edit();
-            saver.putString(ExperimentRuntime.INITIAL_VOLTAGE, initialV);
-            saver.putString("highVoltage", highV);
-            saver.putString("lowVoltage", lowV);
-            saver.putString("finalVoltage", finalV);
-            saver.putString("polarity", polarity);
-            saver.putString("scanRate", scanrate);
-            saver.putString("scanSegments", segments);
-            saver.putString("sampleInterval", interval);
-//          saver.putString("quietTime", quiettime);
-            saver.putString("sensitivity", sens);
-            saver.putBoolean("isAutoSens", isAuto);
-            saver.putBoolean("isFinalE", isFinal);
-            saver.putBoolean("isAuxRecording", isAux);
+            saver.putString(INITIAL_VOLTAGE, initialV);
+            saver.putString(HIGH_VOLTAGE, highV);
+            saver.putString(LOW_VOLTAGE, lowV);
+            saver.putString(FINAL_VOLTAGE, finalV);
+            saver.putString(POLARITY_TOGGLE, polarity);
+            saver.putString(SCAN_RATE, scanrate);
+            saver.putString(SWEEP_SEGS, segments);
+            saver.putString(SAMPLE_INTEVAL, interval);
+            saver.putString(QUIET_TIME, quiettime);
+            saver.putString(SENSITIVITY, sens);
+            saver.putBoolean(IS_AUTOSENS, isAuto);
+            saver.putBoolean(IS_FINALE, isFinal);
+            saver.putBoolean(IS_AUX_RECORDING, isAux);
             saver.apply();
-
-
             Intent goToRuntime = new Intent(this, ExperimentRuntime.class);
             startActivity(goToRuntime);
 
