@@ -44,11 +44,11 @@ public class Graph {
             graphInRealTime();
     }
 
-    protected DataPoint generateFakeDataPoint() {
+    protected DataPoint generateFakeDataPoint(int x) {
         return new DataPoint(0.1*x,Math.sin(0.1*x+offset));
     }
 
-    protected DataPoint generateFakeDataPointReverse(){
+    protected DataPoint generateFakeDataPointReverse(int x){
         return new DataPoint(0.1*x,-1*Math.sin(0.1*x));
     }
 
@@ -64,7 +64,7 @@ public class Graph {
                         if (i != x) {
                             return;
                         }
-                        addEntry(generateFakeDataPoint());
+                        addEntry(generateFakeDataPoint(x));
                         Thread.sleep(interval);
                     }
                     x = numberOfPoints - 2;
@@ -72,7 +72,7 @@ public class Graph {
                         if (i != x) {
                             return;
                         }
-                        addEntry(generateFakeDataPointReverse());
+                        addEntry(generateFakeDataPointReverse(x));
                         Thread.sleep(interval);
                     }
                 } catch (InterruptedException e) {
@@ -107,5 +107,9 @@ public class Graph {
 
     public ArrayList<DataPoint> getFullData(){
         return fullData;
+    }
+
+    public double getOffset(){
+        return  offset;
     }
 }
