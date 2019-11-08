@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class GraphTest {
     Graph graph;
@@ -44,7 +44,7 @@ public class GraphTest {
     public void drawOnFakeData_isCorrect(){
         graph.drawOnFakeData(numOfPoints);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e){
             e.printStackTrace();
         }
