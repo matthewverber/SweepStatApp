@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 
 public class Graph {
-    private LineGraphSeries<DataPoint> forwardSeries = new LineGraphSeries<>();
-    private LineGraphSeries<DataPoint> backwardSeries = new LineGraphSeries<>();
+    private LineGraphSeries<DataPoint> forwardSeries;
+    private LineGraphSeries<DataPoint> backwardSeries;
     private int numberOfPoints = 100;
     private ArrayList<DataPoint> forwardData = new ArrayList<>();
     private ArrayList<DataPoint> backwardData = new ArrayList<>();
@@ -21,12 +21,15 @@ public class Graph {
     private GraphView graph;
     private Viewport viewport;
     private DataPoint dataPoint = null;
+    private int largestX;
 
     public Graph(GraphView graph, Viewport viewport, long interval){
         this.graph = graph;
         this.viewport = viewport;
         this.interval = interval;
         if (graph != null){
+            forwardSeries = new LineGraphSeries<>();
+            backwardSeries = new LineGraphSeries<>();
             GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
             gridLabel.setHorizontalAxisTitle("Voltage");
             gridLabel.setVerticalAxisTitle("Current");
@@ -37,10 +40,11 @@ public class Graph {
             offset = Math.random();
             x = 0;
             numberOfPoints = numOfPoints;
-            forwardSeries = new LineGraphSeries<>();
             backwardData = new ArrayList<>();
-            backwardSeries = new LineGraphSeries<>();
+            largestX = 0;
             if (graph != null){
+                forwardSeries = new LineGraphSeries<>();
+                backwardSeries = new LineGraphSeries<>();
                 graph.removeAllSeries();
                 graph.addSeries(forwardSeries);
                 graph.addSeries(backwardSeries);
@@ -90,12 +94,17 @@ public class Graph {
     public void addEntry(DataPoint data){
         this.dataPoint = data;
         fullData.add(data);
-        if(dataPoint.getX() < forwardSeries.getHighestValueX()) {
+        if(dataPoint.getX() < largestX) {
             backwardData.add(0,dataPoint);
-            backwardSeries.resetData(backwardData.toArray(new DataPoint[0]));
+            if (backwardSeries != null){
+                backwardSeries.resetData(backwardData.toArray(new DataPoint[0]));
+            }
         } else {
+            largestX = x;
             forwardData.add(dataPoint);
-            forwardSeries.appendData(dataPoint, false, numberOfPoints);
+            if (forwardSeries != null){
+                forwardSeries.appendData(dataPoint, false, numberOfPoints);
+            }
         }
     }
 
