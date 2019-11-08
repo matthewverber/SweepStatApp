@@ -17,30 +17,35 @@ public class Graph {
     private ArrayList<DataPoint> fullData = new ArrayList<>();
     private int x = 0;
     private double offset = 0;
-    private long interval = 50;
+    private long interval;
     private GraphView graph;
     private Viewport viewport;
     private DataPoint dataPoint = null;
 
-    public Graph(GraphView graph, Viewport viewport){
+    public Graph(GraphView graph, Viewport viewport, long interval){
         this.graph = graph;
         this.viewport = viewport;
-        GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
-        gridLabel.setHorizontalAxisTitle("Voltage");
-        gridLabel.setVerticalAxisTitle("Current");
+        this.interval = interval;
+        if (graph != null){
+            GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
+            gridLabel.setHorizontalAxisTitle("Voltage");
+            gridLabel.setVerticalAxisTitle("Current");
+        }
     }
 
     public void drawOnFakeData (int numOfPoints){
             offset = Math.random();
             x = 0;
             numberOfPoints = numOfPoints;
-            graph.removeAllSeries();
             forwardSeries = new LineGraphSeries<>();
             backwardData = new ArrayList<>();
             backwardSeries = new LineGraphSeries<>();
-            graph.addSeries(forwardSeries);
-            graph.addSeries(backwardSeries);
-            viewport.setMaxX(numberOfPoints*0.1);
+            if (graph != null){
+                graph.removeAllSeries();
+                graph.addSeries(forwardSeries);
+                graph.addSeries(backwardSeries);
+                viewport.setMaxX(numberOfPoints*0.1);
+            }
             graphInRealTime();
     }
 
@@ -49,7 +54,7 @@ public class Graph {
     }
 
     protected DataPoint generateFakeDataPointReverse(int x){
-        return new DataPoint(0.1*x,-1*Math.sin(0.1*x));
+        return new DataPoint(0.1*x,-1*Math.sin(0.1*x+offset));
     }
 
     protected void graphInRealTime(){
