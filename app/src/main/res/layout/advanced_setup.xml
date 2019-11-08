@@ -4,15 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4B000000"
+    android:background="#FFBBF8F0"
     android:orientation="vertical">
 
     <ScrollView
         android:id="@+id/paramsContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,6 +19,7 @@
             android:id="@+id/paramsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -34,6 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/initial_voltage" />
 
                 <EditText
@@ -41,6 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="5"
+                    android:fontFamily="sans-serif-medium"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal" />
 
@@ -49,6 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/v" />
 
             </LinearLayout>
@@ -64,6 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/high_voltage" />
 
                 <EditText
@@ -71,6 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="5"
+                    android:fontFamily="sans-serif-medium"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal" />
 
@@ -79,6 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/v" />
 
             </LinearLayout>
@@ -94,6 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/low_voltage" />
 
                 <EditText
@@ -101,6 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="5"
+                    android:fontFamily="sans-serif-medium"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal" />
 
@@ -109,6 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/v" />
             </LinearLayout>
 
@@ -123,6 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/final_voltage" />
 
                 <EditText
@@ -130,6 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="5"
+                    android:fontFamily="sans-serif-medium"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal" />
 
@@ -138,6 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/v" />
 
             </LinearLayout>
@@ -152,18 +163,18 @@
                     android:id="@+id/pol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/initial_polarity" />
 
                 <ToggleButton
                     android:id="@+id/polarity"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
-                    android:background="#D81B60"
                     android:text="@string/positive"
                     android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
                     android:textOff="@string/positive"
                     android:textOn="@string/negative" />
             </LinearLayout>
@@ -178,6 +189,7 @@
                     android:id="@+id/scR8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/scan_rate" />
 
                 <EditText
@@ -185,6 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="5"
+                    android:fontFamily="sans-serif-medium"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal" />
 
@@ -192,6 +205,7 @@
                     android:id="@+id/v_s"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/v_s" />
 
             </LinearLayout>
@@ -206,6 +220,7 @@
                     android:id="@+id/sweepSegs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/sweep_segments" />
 
                 <EditText
@@ -213,6 +228,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="5"
+                    android:fontFamily="sans-serif-medium"
                     android:inputType="numberDecimal" />
 
             </LinearLayout>
@@ -227,6 +243,7 @@
                     android:id="@+id/sampInt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/sample_interval" />
 
                 <EditText
@@ -235,6 +252,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:ems="5"
+                    android:fontFamily="sans-serif-medium"
                     android:inputType="numberDecimal" />
 
                 <TextView
@@ -242,6 +260,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/v" />
             </LinearLayout>
 
@@ -255,6 +274,7 @@
                     android:id="@+id/quiTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/quiet_time" />
 
                 <EditText
@@ -262,12 +282,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="5"
+                    android:fontFamily="sans-serif-medium"
                     android:inputType="numberDecimal" />
 
                 <TextView
                     android:id="@+id/sec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/seconds" />
             </LinearLayout>
 
@@ -281,6 +303,7 @@
                     android:id="@+id/sens"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/sensitivity" />
 
                 <Spinner
@@ -294,6 +317,7 @@
                     android:id="@+id/amps_volts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/a_v" />
             </LinearLayout>
 
@@ -301,18 +325,21 @@
                 android:id="@+id/isAutoSens"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/auto_sens" />
 
             <CheckBox
                 android:id="@+id/isFinalE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/enable_final_voltage" />
 
             <CheckBox
                 android:id="@+id/isAuxSignalRecording"
                 android:layout_width="375dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/enable_auxiliary_signal_recording" />
 
             <LinearLayout

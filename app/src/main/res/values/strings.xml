@@ -2,7 +2,7 @@
     <string name="app_name">SweepStatApp</string>
     <string name="sweep_stat_app">Sweep Stat App</string>
     <string name="an_image_of_the_sweepstat_version_3_2">An image of the SweepStat version 3–2</string>
-    <string name="new_experiment">New Experiment</string>
+    <string name="new_experiment">Run Advanced Experiment</string>
     <string name="load_configuration">Load Configuration</string>
     <string name="recent_results">Recent Results</string>
     <string name="check_bluetooth_connection">Check Bluetooth Connection</string>
@@ -12,7 +12,7 @@
     <string name="export">Export</string>
     <string name="edit_parameters">Edit Parameters</string>
     <string name="finish_setup">Finish Setup</string>
-    <string name="simple_setup">Simple Setup</string>
+    <string name="simple_setup">Run Experimental Assistant</string>
     <string name="initial_voltage">Initial Voltage:</string>
     <string name="v">V</string>
     <string name="enable_auxiliary_signal_recording">Enable Auxiliary Signal Recording</string>
@@ -44,6 +44,33 @@
     <string name="assistant_for">This assistant is best used for investigating the electrochemical response of outer-sphere electrochemical reactions where the voltammograms will take one of two possible shapes:</string>
     <string name="current_versus_potential_explained">Here, the current (I) resulting from the reaction of a molecule with the electrode surface is plotted against the potential (E). It is clear from this plot that one must exceed a certain potential in order to drive the current-producing reaction. There are two main regions of each voltammogram, the kinetically limited region and the mass transfer limited region, both of which are manifested at different potentials.</string>
     <string name="sample_caption">Sample graphs to provide examples of limiting factors for voltammograms</string>
+    <string name="voltammogram_shape">The shape of your voltammogram will take is directly related to the concentration profiles of analyte about the working electrode surface. At typical scan rates, a macroelectrode (r &gt; 25 um) will produce a “duck shaped” voltammogram, while a micro- or ultramicroelectrode (r &lt; 25 um) will produce a sigmoidal voltammogram.</string>
+    <string name="electrode_prompt">What type of electrode are you using for this experiment?</string>
+    <string name="macroelectrode">Macroelectrode (r &gt; 25 µm)</string>
+    <string name="microelectrode">Microelectrode (r &lt; 25 µm)</string>
+    <string name="connection_note">Note: it is important to connect this electrode to the red clip just before beginning the experiment, you will be prompted to make the connection at a later time.</string>
+    <string name="current_definitions">Current is defined as the number of charges (C) that flow per second (s).</string>
+    <string name="current_formula">I=C/s</string>
+    <string name="jumper_instructions">We must adjust the “sensitivity” setting of the SweepStat to ensure the device can see and measure our signal. If you chose the macroelectrode, please ensure that all the jumpers on the SweepStat board are connected to their respective pins (JP1-in, JP2-in, JP3-in). If you are using a microelectrode, please remove the jumpers (JP1-out, JP2-out, JP3-out).</string>
+    <string name="jumper_image_description">Image demonstrating the proper connections of jumpes on the SweepStat board.</string>
+    <string name="let_s_talk">Let’s talk about the other electrode we will use to make this measurement:</string>
+    <string name="electrodes_explanation">Because a voltage measurement is always a differential measurement (meaning that voltage can only be measured relative to other voltage), most experiments compare the potential against a reference electrode, which has a defined equilibrium. Most potentiostats add this reference electrode component in a three-electrode configuration to avoid passing current through the reference, thus disturbing its equilibrium. Thus, a counter electrode is used to complete the circuit.</string>
+    <string name="electrode_explanation_text">Because the SweepStat is a two-electrode configuration, the black lead represents a combined reference/counter electrode. If small currents are being passed, as is in the case of the microelectrode systems, a typical fritted reference such as a silver/silver chloride (Ag/AgCl) electrode may be installed on the black clip. If a macroelectrode is being used, which we expect to pass higher currents, please install an appropriate pseudo-reference/counter electrode (i.e. graphite rod, platinum wire) on the black clip.</string>
+    <string name="reference_prompt_text">Please select the reference electrode you are using:</string>
+    <string name="pseudo_ref">Pseudo-Reference</string>
+    <string name="Ag_AgCl">Silver / Silver Chloride</string>
+    <string name="sat_caromel">Saturated Caromel</string>
+    <string name="sat_H">Saturated Hydrogen</string>
+    <string name="potential_explanation_text">Next, you need to select the potential (E) you wish to apply at the electrode surface. The experiment will start at the initial potential, ramp to the vertex potential, and return to the initial potential (hence, cyclic voltammetry). Because the goal is to observe the electrochemical response of your analyte, you should select an initial potential where no reaction is expected, and a final potential where you expect the reaction to be occurring.</string>
+    <string name="potential_graphs_description">Sample graphs demonstrating the influence of potential on cyclic voltammetry</string>
+    <string name="solvent_window_text">When selecting a potential range, it is important to consider the solvent window, which indicates the potential at which the solvent itself begins to react with the electrode surface. At a pH of 7, the solvent window for a carbon electrode is around -1 to 1V vs Ag/AgCl. For typical outer-sphere oxidation experiments, a potential range of 0 to 0.6 V vs Ag/AgCl is recommended.</string>
+    <string name="intial_vertex_potential">Please enter the initial and vertex potential:</string>
+    <string name="initial_potential">Initial Potential</string>
+    <string name="vertex_potential">Vertex Potential</string>
+    <string name="SR_description_text">Now that we know the potentials to scan over, we must consider the scan rate. Altering the scan rate over several experiments can be a useful tool for diagnosing the reactivity of analyte at macroelectrodes. Scan rates accessible to the SweepStat range from 0.005 to 0.5 V/s. For beginners, a good place to start is 0.05 V/s.</string>
+    <string name="scan_rate_prompt_text">Please enter your desired scan rate:</string>
+    <string name="scan_rate_simple">Scan Rate</string>
+    <string name="excellent_finalize">Excellent! We are now ready to make the measurement. If you have not done so already, please place the counter/reference electrode in the solution and connect the black clip. Then, place the working electrode in the solution and connect the red clip. It is important to place these electrodes in the solution before connecting the clips to reduce the likelihood of static discharge damaging the electrodes.</string>
 
 
     <!-- strings for activity_device_list.xml and DeviceListActivity.java -->

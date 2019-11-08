@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4B000000"
+    android:background="#FFBBF8F0"
     android:orientation="vertical">
 
     <com.jjoe64.graphview.GraphView
@@ -31,7 +31,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/initial_voltage" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/initial_voltage"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/initialVoltage"
@@ -40,7 +42,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/v1"
@@ -49,7 +53,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/v" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/v"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -64,7 +70,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/high_voltage" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/high_voltage"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/highVoltage"
@@ -73,7 +81,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/v2"
@@ -82,7 +92,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/v" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/v"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -97,7 +109,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/low_voltage" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/low_voltage"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/lowVoltage"
@@ -106,7 +120,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/v3"
@@ -115,7 +131,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/v" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/v"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -130,7 +148,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/final_voltage" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/final_voltage"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/finalVoltage"
@@ -139,7 +159,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/v4"
@@ -148,7 +170,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/v" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/v"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -163,7 +187,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/initial_polarity" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/initial_polarity"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/polarity"
@@ -172,7 +198,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -187,7 +215,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/scan_rate" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/scan_rate"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/scanRate"
@@ -196,7 +226,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/v_s"
@@ -205,7 +237,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/v_s" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/v_s"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -220,7 +254,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/sweep_segments" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/sweep_segments"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/sweepSegments"
@@ -229,7 +265,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -244,7 +282,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/sample_interval" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/sample_interval"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/sampleInterval"
@@ -253,7 +293,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/v10"
@@ -262,7 +304,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/v" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/v"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -277,7 +321,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/quiet_time" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/quiet_time"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/quietTime"
@@ -286,7 +332,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/secs"
@@ -295,7 +343,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/seconds" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/seconds"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -310,7 +360,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/sensitivity" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/sensitivity"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/sensitivity"
@@ -319,7 +371,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/loading" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/loading"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/av"
@@ -328,7 +382,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="0"
-                    android:text="@string/a_v" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/a_v"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -343,7 +399,9 @@
                     android:id="@+id/autoSensEnabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/auto_sens_is_enabled"
+                    android:textSize="14sp"
                     android:visibility="invisible" />
             </LinearLayout>
 
@@ -358,7 +416,9 @@
                     android:id="@+id/finalEEnabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/final_voltage_is_enabled"
+                    android:textSize="14sp"
                     android:visibility="invisible" />
             </LinearLayout>
 
@@ -372,7 +432,9 @@
                     android:id="@+id/auxRecordingEnabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/auxiliary_signal_recording_is_enabled"
+                    android:textSize="14sp"
                     android:visibility="invisible" />
 
 
@@ -386,7 +448,7 @@
 
                 <Button
                     android:id="@+id/editParams"
-                    style="@style/TextAppearance.AppCompat.Button"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -396,7 +458,7 @@
 
                 <Button
                     android:id="@+id/exportRes"
-                    style="@style/TextAppearance.AppCompat.Button"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -405,12 +467,12 @@
 
                 <Button
                     android:id="@+id/runExperiment"
-                    style="@style/TextAppearance.AppCompat.Button"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/run"
                     android:onClick="onClick"
+                    android:text="@string/run"
                     android:textSize="12sp" />
 
             </LinearLayout>
