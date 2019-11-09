@@ -3,13 +3,16 @@ package com.example.sweepstatapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.app.Activity;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -24,6 +27,8 @@ import java.io.IOException;
 public class Export extends AppCompatActivity {
 
     double[] voltage, current;
+    final String SWEEPSTAT = "SweepStat";
+    final File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -40,21 +45,75 @@ public class Export extends AppCompatActivity {
 
     public void onClick(View view){
         if (view.getId() == R.id.local){
-            createExcelFile();
+            if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
+                return;
+            verifyStoragePermissions(this);
+            DIR.mkdirs();
+            showEnterFileName(Export.this);
         } else if (view.getId() == R.id.googleDrive){
-
+            if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
+                return;
+            verifyStoragePermissions(this);
         }
     }
 
-    protected boolean createExcelFile(){
-        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()){
-            return false;
-        }
+    private void showEnterFileName(final Context c) {
+        final EditText fileNameEditText = new EditText(c);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("Enter File Name")
+                .setMessage("Please enter file name:")
+                .setView(fileNameEditText)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String fileName = String.valueOf(fileNameEditText.getText());
+                        if (fileName == null || fileName.equals("")){
+                            return;
+                        }
+                        File file = new File(DIR, fileName + ".xls");
+                        if (file.exists()){
+                            int i = 1;
+                            String newFileName;
+                            do{
+                                file = new File(DIR, fileName + '(' + i +").xls");
+                                newFileName = fileName + '(' + i + ')';
+                                i++;
+                            } while (file.exists());
+                            showFileAlreadyExists(c, newFileName);
+                        } else {
+                            createExcelFile(file);
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+    }
 
+    private void showFileAlreadyExists(Context c, final String fileName) {
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("File Already Exists")
+                .setMessage("A file with name " + fileName + ".xls already exists, do you want to save as " + fileName + ".xls")
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File file = new File(DIR, fileName + ".xls");
+                        createExcelFile(file);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+    }
+
+    protected boolean createExcelFile(File file){
+
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
+        dir.mkdirs();
         boolean success = false;
 
         Workbook wb = new HSSFWorkbook();
-        Cell c = null;
+        Cell c;
         int nextRow = 0;
 
         Sheet sheet = wb.createSheet("data");
@@ -121,13 +180,7 @@ public class Export extends AppCompatActivity {
         sheet.setColumnWidth(0, 20*256);
         sheet.setColumnWidth(1, 20*256);
 
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "SavedData.xls");
 
-        verifyStoragePermissions(Export.this);
-
-        if (file.exists()){
-            file.delete();
-        }
         FileOutputStream os = null;
         try {
             file.createNewFile();
