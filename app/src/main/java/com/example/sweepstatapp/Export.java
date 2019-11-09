@@ -1,25 +1,29 @@
 package com.example.sweepstatapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.app.Activity;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,11 +33,16 @@ public class Export extends AppCompatActivity {
     double[] voltage, current;
     final String SWEEPSTAT = "SweepStat";
     final File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
+    final File TEMP_DIR = new File(DIR,"temp");
+    int action = -1;
+    private static final int LOCAL = 0;
+    private static final int EXPORT = 1;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,20 +53,20 @@ public class Export extends AppCompatActivity {
     }
 
     public void onClick(View view){
+        if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
+            return;
+        verifyStoragePermissions(this);
+        DIR.mkdirs();
         if (view.getId() == R.id.local){
-            if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
-                return;
-            verifyStoragePermissions(this);
-            DIR.mkdirs();
-            showEnterFileName(Export.this);
-        } else if (view.getId() == R.id.googleDrive){
-            if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
-                return;
-            verifyStoragePermissions(this);
+            action = LOCAL;
+            showEnterFileName(Export.this, action);
+        } else if (view.getId() == R.id.export){
+            action = EXPORT;
+            showEnterFileName(Export.this, action);
         }
     }
 
-    private void showEnterFileName(final Context c) {
+    private void showEnterFileName(final Context c, final int action) {
         final EditText fileNameEditText = new EditText(c);
         AlertDialog dialog = new AlertDialog.Builder(c)
                 .setTitle("Enter File Name")
@@ -66,38 +75,32 @@ public class Export extends AppCompatActivity {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String fileName = String.valueOf(fileNameEditText.getText());
-                        if (fileName == null || fileName.equals("")){
+                        if (action < LOCAL || action > EXPORT)
                             return;
-                        }
-                        File file = new File(DIR, fileName + ".xls");
-                        if (file.exists()){
-                            int i = 1;
-                            String newFileName;
-                            do{
-                                file = new File(DIR, fileName + '(' + i +").xls");
-                                newFileName = fileName + '(' + i + ')';
-                                i++;
-                            } while (file.exists());
-                            showFileAlreadyExists(c, newFileName);
-                        } else {
-                            createExcelFile(file);
-                        }
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .create();
-        dialog.show();
-    }
 
-    private void showFileAlreadyExists(Context c, final String fileName) {
-        AlertDialog dialog = new AlertDialog.Builder(c)
-                .setTitle("File Already Exists")
-                .setMessage("A file with name " + fileName + ".xls already exists, do you want to save as " + fileName + ".xls")
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        File file = new File(DIR, fileName + ".xls");
+                        String fileName = String.valueOf(fileNameEditText.getText());
+                        File file = null;
+                        if (action == LOCAL){
+                            if (fileName == null || fileName.equals(""))
+                                return;
+
+                            file = new File(DIR, fileName + ".xls");
+                            if (file.exists()){
+                                int i = 1;
+                                do{
+                                    file = new File(DIR, fileName + '(' + i +").xls");
+                                    i++;
+                                } while (file.exists());
+                            }
+                        } else if (action == EXPORT){
+                            if (TEMP_DIR.exists())
+                                deleteDir(TEMP_DIR);
+                            else
+                                TEMP_DIR.mkdirs();
+
+                            file = new File(TEMP_DIR,fileName+".xls");
+                        }
+
                         createExcelFile(file);
                     }
                 })
@@ -106,11 +109,11 @@ public class Export extends AppCompatActivity {
         dialog.show();
     }
 
-    protected boolean createExcelFile(File file){
+    protected File createExcelFile(File file){
+        if (action < LOCAL || action > EXPORT)
+            return null;
 
-        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
-        dir.mkdirs();
-        boolean success = false;
+        File retVal = null;
 
         Workbook wb = new HSSFWorkbook();
         Cell c;
@@ -160,13 +163,13 @@ public class Export extends AppCompatActivity {
             }
         }
 
+        sheet.createRow(nextRow);
+        nextRow++;
         row = sheet.createRow(nextRow);
         c = row.createCell(0);
         c.setCellValue("Voltage");
         c = row.createCell(1);
         c.setCellValue("Current");
-        nextRow++;
-        sheet.createRow(nextRow);
         nextRow++;
 
         for (int i = 0; i < voltage.length; i++){
@@ -180,16 +183,17 @@ public class Export extends AppCompatActivity {
         sheet.setColumnWidth(0, 20*256);
         sheet.setColumnWidth(1, 20*256);
 
-
         FileOutputStream os = null;
         try {
-            file.createNewFile();
-            os = new FileOutputStream(file);
-            wb.write(os);
-            os.flush();
-            success = true;
-            os.close();
-            wb.close();
+            if (!(action == EXPORT && file.exists())){
+                file.createNewFile();
+                os = new FileOutputStream(file);
+                wb.write(os);
+                os.flush();
+                os.close();
+                wb.close();
+                retVal = file;
+            }
         } catch (IOException e){
             e.printStackTrace();
         } finally {
@@ -201,7 +205,26 @@ public class Export extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        return success;
+        if (action == EXPORT) {
+            Uri path = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("vnd.android.cursor.dir/email");
+            emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+            emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(emailIntent, "Choose where to export"));
+        }
+        return retVal;
+    }
+
+    private void deleteDir(File dir){
+        for (File file: dir.listFiles()) {
+            if (file.isDirectory()){
+                deleteDir(file);
+                file.delete();
+            } else {
+                file.delete();
+            }
+        }
     }
 
     public static void verifyStoragePermissions(Activity activity) {
