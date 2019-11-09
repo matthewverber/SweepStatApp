@@ -21,7 +21,7 @@ public class Graph {
     private GraphView graph;
     private Viewport viewport;
     private DataPoint dataPoint = null;
-    private int largestX;
+    private double largestX;
 
     public Graph(GraphView graph, Viewport viewport, long interval){
         this.graph = graph;
@@ -100,7 +100,7 @@ public class Graph {
                 backwardSeries.resetData(backwardData.toArray(new DataPoint[0]));
             }
         } else {
-            largestX = x;
+            largestX = dataPoint.getX();
             forwardData.add(dataPoint);
             if (forwardSeries != null){
                 forwardSeries.appendData(dataPoint, false, numberOfPoints);

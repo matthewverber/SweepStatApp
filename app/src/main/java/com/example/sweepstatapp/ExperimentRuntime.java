@@ -19,7 +19,8 @@ public class ExperimentRuntime extends AppCompatActivity {
     Boolean autoSens, finalE, auxRecord;
     String loadFailed = "Load failed!";
     private Graph graph = null;
-    private int numOfPoints = 100;
+    private int numOfPoints = 10;
+    private long interval = 20;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class ExperimentRuntime extends AppCompatActivity {
         viewport.setMinY(-1);
         viewport.setMaxY(1);
         viewport.setMinX(0);
-        graph = new Graph(graphView, viewport, 50);
+        graph = new Graph(graphView, viewport, interval);
 
         initialVoltage = findViewById(R.id.initialVoltage);
         highVoltage = findViewById(R.id.highVoltage);

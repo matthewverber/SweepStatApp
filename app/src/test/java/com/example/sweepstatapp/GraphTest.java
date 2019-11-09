@@ -44,7 +44,7 @@ public class GraphTest {
     public void drawOnFakeData_isCorrect(){
         graph.drawOnFakeData(numOfPoints);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(105);
         } catch (InterruptedException e){
             e.printStackTrace();
         }
