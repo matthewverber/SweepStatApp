@@ -20,7 +20,7 @@ public class ExperimentRuntime extends AppCompatActivity {
     String loadFailed = "Load failed!";
     private Graph graph = null;
     private int numOfPoints = 10;
-    private long interval = 20;
+    private long interval = 50;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
