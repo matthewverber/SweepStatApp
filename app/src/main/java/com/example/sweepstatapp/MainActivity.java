@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.recentResults){
             // open recent results list -- find out how to save results locally
             // not complete for walking skeleton
+            Intent loadData = new Intent(this, LoadData.class);
+            startActivity(loadData);
         }
 
 

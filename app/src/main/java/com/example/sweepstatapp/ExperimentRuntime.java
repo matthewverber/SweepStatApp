@@ -95,6 +95,12 @@ public class ExperimentRuntime extends AppCompatActivity {
             Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
             graph = new Graph(graphView);
         }
+
+        Bundle data = getIntent().getExtras();
+        String filePath = data.getString("filePath");
+        if (filePath != null){
+            //graph data
+        }
     }
 
     public void onClick(View view){
