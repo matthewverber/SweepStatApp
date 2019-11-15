@@ -18,6 +18,7 @@ public class ExperimentRuntime extends AppCompatActivity {
     sampleInterval, sensitivity, sweepSegments;
     Boolean autoSens, finalE, auxRecord;
     String loadFailed = "Not currently enabled";
+    double lowVolt, highVolt;
     private Graph graph = null;
     private int numOfPoints = 10;
     private long interval = 20;
@@ -40,8 +41,8 @@ public class ExperimentRuntime extends AppCompatActivity {
         viewport.setXAxisBoundsManual(true);
         viewport.setMinY(-1);
         viewport.setMaxY(1);
-        viewport.setMinX(0);
-        graph = new Graph(graphView, viewport, interval);
+        viewport.setMinX(-1);
+        viewport.setMaxX(1);
 
         initialVoltage = findViewById(R.id.initialVoltage);
         highVoltage = findViewById(R.id.highVoltage);
@@ -58,8 +59,18 @@ public class ExperimentRuntime extends AppCompatActivity {
         auxRecord = false;
         if(saved != null){
             initialVoltage.setText(saved.getString(AdvancedSetup.INITIAL_VOLTAGE, loadFailed));
-            highVoltage.setText(saved.getString(AdvancedSetup.HIGH_VOLTAGE, loadFailed));
-            lowVoltage.setText(saved.getString(AdvancedSetup.LOW_VOLTAGE, loadFailed));
+
+            String highV = saved.getString(AdvancedSetup.HIGH_VOLTAGE, loadFailed);
+            String lowV = saved.getString(AdvancedSetup.LOW_VOLTAGE, loadFailed);
+            highVoltage.setText(highV);
+            lowVoltage.setText(lowV);
+            if (!highV.equals("") && !lowV.equals("")) {
+                highVolt = Double.parseDouble(highV);
+                lowVolt = Double.parseDouble(lowV);
+                graph = new Graph(graphView, viewport, interval, lowVolt, highVolt);
+            } else
+                graph = new Graph(graphView, viewport, interval);
+
             finalVoltage.setText(saved.getString(AdvancedSetup.FINAL_VOLTAGE, loadFailed));
             polarity.setText(saved.getString(AdvancedSetup.POLARITY_TOGGLE, loadFailed));
             scanRate.setText(saved.getString(AdvancedSetup.SCAN_RATE, loadFailed));
@@ -78,6 +89,7 @@ public class ExperimentRuntime extends AppCompatActivity {
                 findViewById(R.id.auxRecordingEnabled).setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
+            graph = new Graph(graphView, viewport, interval);
         }
     }
 
