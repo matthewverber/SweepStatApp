@@ -1,0 +1,11 @@
+Programming Language 
+
+SUMMARY: In order to code the app, we decided to stick to Java. 
+
+PROBLEM: In order to create an app, we need to decide on a language to code in. There are many languages to code in for various platforms. In order to code using Android Studio, options are to use Kotlin or Java, in conjunction with various xml files. 
+
+CONSTRAINTS: Limitations of Java and Android Studio will need to be addressed as they become prevalent. 
+
+OPTIONS: Code in Kotlin, or Java through Android Studio, or search for an alternate coding environment / language. 
+
+RATIONALE: The members of the team are already familiar with coding in Java, so we will continue to use Android Studio and Java for the coding of our Android App. 
