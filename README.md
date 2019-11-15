@@ -80,7 +80,7 @@ Eric Xin
 
 # License 
 
-[Apache 2.0] (https://github.com/AmadeusSko/SweepStatApp/blob/master/LICENSE) 
+[Apache 2.0](https://github.com/AmadeusSko/SweepStatApp/blob/master/LICENSE) 
 
 # Acknowledgements 
 
