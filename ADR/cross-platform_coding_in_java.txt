@@ -1,0 +1,20 @@
+Cross-Platform Coding in Java 
+
+SUMMARY:  
+
+PROBLEM: The team currently does not own Apple computers, a core necessity for publishing an iOS app. With the team working in Android Studio, we need to find a simple and supported way to either translate our app into Objective C for iOS use, or to code quickly on Apple hardware available to use at the AppLab or the Undergraduate Library. 
+
+CONSTRAINTS: Support for the option we may choose, its documentation, and the ease of use. Also, should iOS development become an option, costs associated with that will need to be fronted by the client team. 
+
+OPTIONS: 
+
+Multi–OS engine 
+Pros: Fully integrated with Android Studio, next version to be released within the first week of October 
+Cons: last release was 1.5 years ago; development just restarted last September 
+J2objc 
+Pros: Well documented, used by Google, been around for a long time 
+Cons: no platform independent UI toolkit, must make iOS UI in XCode 
+Codename one  
+Pros: Well documented, active community, GUI integrated 
+Cons: Free version only supports up to 8.5Mb build jar size 
+RATIONALE: Monitor the feasibility of Multi-OS Engine, j2ObjC, and Codename One. Test the usability of the various options with the walking skeleton to see how challenging translation to iOS will be. 
