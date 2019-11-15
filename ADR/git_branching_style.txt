@@ -1,0 +1,17 @@
+Git Branching Style 
+
+SUMMARY: In order to have an agreed-upon Git Branching style we decided to use OneFlow with rebasing rather than merging. 
+
+PROBLEM: In using Git, we need an organized way to keep track of changes to our code, and to “tell the story” of the app’s development over time. 
+
+CONSTRAINTS: We are not too well versed with Git, so we need something that is simple, easy to follow, and logical. 
+
+OPTIONS: 
+
+OneFlow with rebasing 
+Pros: Linear history, easier to understand 
+Cons: Reverting entire feature requires reverting multiple commits 
+OneFlow with merging 
+Pros: Only one commit is required to revert entire feature 
+Cons: History could be messy and hard to understand 
+RATIONALE: We would like to make the history easier to understand by readers as other teams may want to create their own application to control the device, and a linear history could be better to follow. A linear history also helps us when writing our documentation that will be included in a research paper. 
