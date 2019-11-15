@@ -10,23 +10,23 @@ Java 8 SDK and Android Studio
 
 To install Java 8 SDK,  
 
-Go to the following Oracle website  
+  1. Go to the following Oracle website  
 
-https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html 
+     https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html 
 
-Check “Accept License Agreement” 
+  2. Check “Accept License Agreement” 
 
-Download the correct version for your system (Do not download the Demos and Samples) 
+  3. Download the correct version for your system (Do not download the Demos and Samples) 
 
-Run the JDK installer 
+  4. Run the JDK installer 
 
 To install Android Studio,  
 
-Go to Android Studio website https://developer.android.com/studio 
+  1. Go to Android Studio website https://developer.android.com/studio 
 
-Click “Download Android Studio” 
+  2. Click “Download Android Studio” 
 
-Run the Android Studio installer 
+  3. Run the Android Studio installer 
 
 ## Installing 
 
