@@ -31,7 +31,7 @@ import java.io.IOException;
 public class Export extends AppCompatActivity {
 
     double[] voltage, current;
-    final String SWEEPSTAT = "SweepStat";
+    final static String SWEEPSTAT = "SweepStat";
     final File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
     final File TEMP_DIR = new File(DIR,"temp");
     int action = -1;
@@ -238,12 +238,12 @@ public class Export extends AppCompatActivity {
         }
     }
 
-    private static boolean isExternalStorageReadOnly(){
+    public static boolean isExternalStorageReadOnly(){
         String extStorageState = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState);
     }
 
-    private static boolean isExternalStorageAvailable(){
+    public static boolean isExternalStorageAvailable(){
         String extStorageState = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(extStorageState);
     }
