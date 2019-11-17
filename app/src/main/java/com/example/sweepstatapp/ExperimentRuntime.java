@@ -22,7 +22,6 @@ public class ExperimentRuntime extends AppCompatActivity {
     String loadFailed = "Load failed!";
     double lowVolt, highVolt;
     private Graph graph = null;
-    private int numOfPoints = 50;
     private long interval = 50;
 
     @Override
@@ -95,7 +94,7 @@ public class ExperimentRuntime extends AppCompatActivity {
 
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){
-           graph.drawOnFakeData(numOfPoints);
+           graph.drawOnFakeData();
         } else if (view.getId() == R.id.exportRes) {
             DataPoint[] dataPoint = graph.getFullData().toArray(new DataPoint[0]);
             double[] voltage = new double[dataPoint.length];
