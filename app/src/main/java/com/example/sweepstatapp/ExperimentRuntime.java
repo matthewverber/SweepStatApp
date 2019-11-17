@@ -35,6 +35,10 @@ public class ExperimentRuntime extends AppCompatActivity {
 
         GraphView graphView = findViewById(R.id.graph);
         Viewport viewport = graphView.getViewport();
+        viewport.setScrollable(true);
+        viewport.setScrollableY(true);
+        viewport.setScalable(true);
+        viewport.setScalableY(true);
         viewport.setYAxisBoundsManual(true);
         viewport.setXAxisBoundsManual(true);
         viewport.setMinY(-1);

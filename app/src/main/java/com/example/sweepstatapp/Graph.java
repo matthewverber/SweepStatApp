@@ -13,7 +13,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class Graph {
     private LineGraphSeries<DataPoint> forwardSeries;
     private LineGraphSeries<DataPoint> backwardSeries;
-    private int numberOfPoints = 100;
     private ArrayList<DataPoint> forwardData = new ArrayList<>();
     private ArrayList<DataPoint> negatedForwardData = new ArrayList<>();
     private ArrayList<DataPoint> backwardData = new ArrayList<>();
@@ -26,13 +25,10 @@ public class Graph {
     private boolean drawing;
     private boolean reversed;
     private ArrayBlockingQueue<DataPoint> dataPoints;
-//    private final long TIMEOUT = 5;
-//    private boolean endOfInput = false;
 
     public Graph(GraphView graph){
         this.graph = graph;
-
-//        drawing = false;
+        drawing = false;
         reversed = false;
         if (graph != null){
             forwardSeries = new LineGraphSeries<>();
@@ -45,7 +41,7 @@ public class Graph {
             graph.addSeries(forwardSeries);
             graph.addSeries(backwardSeries);
             dataPoints = new ArrayBlockingQueue<>(1024);
-            largestX = 0;
+            largestX = lowVolt;
             GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
             gridLabel.setHorizontalAxisTitle("Voltage");
             gridLabel.setVerticalAxisTitle("Current");
@@ -71,7 +67,7 @@ public class Graph {
         largestX = lowVolt;
         this.highVolt = highVolt;
         this.lowVolt = lowVolt;
-//        graphInRealTime();
+        graphInRealTime();
     }
 
     public void drawOnFakeData (){
@@ -79,9 +75,8 @@ public class Graph {
             return;
         drawing = true;
         offset = Math.random();
-        numberOfPoints = (int)((highVolt - lowVolt) / 0.01)+1;
         backwardData = new ArrayList<>();
-        largestX = 0;
+        largestX = lowVolt;
         reversed = false;
         if (graph != null){
             forwardSeries = new LineGraphSeries<>();
@@ -93,12 +88,11 @@ public class Graph {
             graph.removeAllSeries();
             graph.addSeries(forwardSeries);
             graph.addSeries(backwardSeries);
-            dataPoints = new ArrayBlockingQueue<>(1024);
+            dataPoints.clear();
         } else {
             return;
         }
         generateFakeData();
-        graphInRealTime();
     }
 
     protected void generateFakeData() {
@@ -108,11 +102,11 @@ public class Graph {
                 try {
                     for (double i = highVolt; i >= lowVolt; i -= 0.01) {
                         putData(i,Math.sin(i+offset));
-                        Thread.sleep(20);
+                        Thread.sleep(5);
                     }
                     for (double i = lowVolt; i <= highVolt; i += 0.01) {
                         putData(i,Math.sin(10*i+offset));
-                        Thread.sleep(20);
+                        Thread.sleep(5);
                     }
                     drawing = false;
                 } catch (InterruptedException e){
@@ -121,6 +115,13 @@ public class Graph {
                     drawing = false;
                 }
 
+//                for (double i = highVolt; i >= lowVolt; i -= 0.01) {
+//                    putData(i,Math.sin(i+offset));
+//                }
+//                for (double i = lowVolt; i <= highVolt; i += 0.01) {
+//                    putData(i,Math.sin(10*i+offset));
+//                }
+//                drawing = false;
             }
         }).start();
     }
@@ -129,23 +130,21 @@ public class Graph {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                    while(true){
-                        try {
-                            DataPoint dp = dataPoints.take();
-                            if (dp != null){
-                                addEntry(dp);
-                            }
-                        } catch (InterruptedException e){
-                            e.printStackTrace();
-                        } finally {
-                            continue;
+                while(true){
+                    try {
+                        DataPoint dp = dataPoints.take();
+                        if (dp != null){
+                            addEntry(dp);
                         }
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
                     }
+                }
             }
         }).start();
     }
 
-    public void addEntry(DataPoint data){
+    protected void addEntry(DataPoint data){
         this.dataPoint = data;
         fullData.add(data);
 
