@@ -95,7 +95,7 @@ public class ExperimentRuntime extends AppCompatActivity {
 
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){
-           graph.drawOnFakeData(numOfPoints);
+           graph.drawOnFakeData();
         } else if (view.getId() == R.id.exportRes) {
             DataPoint[] dataPoint = graph.getFullData().toArray(new DataPoint[0]);
             double[] voltage = new double[dataPoint.length];
