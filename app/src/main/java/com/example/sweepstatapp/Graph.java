@@ -3,11 +3,11 @@ package com.example.sweepstatapp;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
-import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
 
 
 public class Graph {
@@ -19,25 +19,32 @@ public class Graph {
     private ArrayList<DataPoint> backwardData = new ArrayList<>();
     private ArrayList<DataPoint> negatedBackwardData = new ArrayList<>();
     private ArrayList<DataPoint> fullData = new ArrayList<>();
-//    private int x = 0;
     private double offset = 0;
-    private long interval;
     private GraphView graph;
-    private Viewport viewport;
     private DataPoint dataPoint = null;
     private double largestX, highVolt, lowVolt;
     private boolean drawing;
     private boolean reversed;
+    private ArrayBlockingQueue<DataPoint> dataPoints;
+//    private final long TIMEOUT = 5;
+//    private boolean endOfInput = false;
 
-    public Graph(GraphView graph, Viewport viewport, long interval){
+    public Graph(GraphView graph){
         this.graph = graph;
-        this.viewport = viewport;
-        this.interval = interval;
-        drawing = false;
+
+//        drawing = false;
         reversed = false;
         if (graph != null){
             forwardSeries = new LineGraphSeries<>();
             backwardSeries = new LineGraphSeries<>();
+            forwardData = new ArrayList<>();
+            negatedForwardData = new ArrayList<>();
+            negatedBackwardData = new ArrayList<>();
+            backwardData = new ArrayList<>();
+            graph.removeAllSeries();
+            graph.addSeries(forwardSeries);
+            graph.addSeries(backwardSeries);
+            dataPoints = new ArrayBlockingQueue<>(1024);
             largestX = 0;
             GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
             gridLabel.setHorizontalAxisTitle("Voltage");
@@ -57,64 +64,83 @@ public class Graph {
         }
     }
 
-    public Graph(GraphView graph, Viewport viewport, long interval, double lowVolt, double highVolt){
-        this(graph, viewport, interval);
-        viewport.setMaxX(-1*lowVolt);
-        viewport.setMinX(-1*highVolt);
+    public Graph(GraphView graph, double lowVolt, double highVolt){
+        this(graph);
+        graph.getViewport().setMaxX(-1*lowVolt);
+        graph.getViewport().setMinX(-1*highVolt);
         largestX = lowVolt;
         this.highVolt = highVolt;
         this.lowVolt = lowVolt;
+//        graphInRealTime();
     }
 
     public void drawOnFakeData (){
-            offset = Math.random();
-            numberOfPoints = (int)((highVolt - lowVolt) / 0.01)+1;
-            backwardData = new ArrayList<>();
-            largestX = 0;
-            if (graph != null){
-                forwardSeries = new LineGraphSeries<>();
-                backwardSeries = new LineGraphSeries<>();
-                forwardData = new ArrayList<>();
-                negatedForwardData = new ArrayList<>();
-                negatedBackwardData = new ArrayList<>();
-                backwardData = new ArrayList<>();
-                graph.removeAllSeries();
-                graph.addSeries(forwardSeries);
-                graph.addSeries(backwardSeries);
-            }
-            graphInRealTime();
-    }
-
-    protected DataPoint generateFakeDataPoint(double x) {
-        return new DataPoint(x,Math.sin(x+offset));
-    }
-
-    protected DataPoint generateFakeDataPointReverse(double x){
-        return new DataPoint(x,-1*Math.sin(x+offset));
-    }
-
-    protected void graphInRealTime(){
         if (drawing)
             return;
+        drawing = true;
+        offset = Math.random();
+        numberOfPoints = (int)((highVolt - lowVolt) / 0.01)+1;
+        backwardData = new ArrayList<>();
+        largestX = 0;
+        reversed = false;
+        if (graph != null){
+            forwardSeries = new LineGraphSeries<>();
+            backwardSeries = new LineGraphSeries<>();
+            forwardData = new ArrayList<>();
+            negatedForwardData = new ArrayList<>();
+            negatedBackwardData = new ArrayList<>();
+            backwardData = new ArrayList<>();
+            graph.removeAllSeries();
+            graph.addSeries(forwardSeries);
+            graph.addSeries(backwardSeries);
+            dataPoints = new ArrayBlockingQueue<>(1024);
+        } else {
+            return;
+        }
+        generateFakeData();
+        graphInRealTime();
+    }
+
+    protected void generateFakeData() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    drawing = true;
-                    reversed = false;
                     for (double i = highVolt; i >= lowVolt; i -= 0.01) {
-                        addEntry(generateFakeDataPoint(i));
-                        Thread.sleep(interval);
+                        putData(i,Math.sin(i+offset));
+                        Thread.sleep(20);
                     }
                     for (double i = lowVolt; i <= highVolt; i += 0.01) {
-                        addEntry(generateFakeDataPointReverse(i));
-                        Thread.sleep(interval);
+                        putData(i,Math.sin(10*i+offset));
+                        Thread.sleep(20);
                     }
                     drawing = false;
-                } catch (InterruptedException e) {
+                } catch (InterruptedException e){
                     e.printStackTrace();
+                } finally {
                     drawing = false;
                 }
+
+            }
+        }).start();
+    }
+
+    protected void graphInRealTime(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                    while(true){
+                        try {
+                            DataPoint dp = dataPoints.take();
+                            if (dp != null){
+                                addEntry(dp);
+                            }
+                        } catch (InterruptedException e){
+                            e.printStackTrace();
+                        } finally {
+                            continue;
+                        }
+                    }
             }
         }).start();
     }
@@ -129,19 +155,27 @@ public class Graph {
             backwardData.add(dataPoint);
             negatedBackwardData.add(0,new DataPoint(-1*dataPoint.getX(), dataPoint.getY()));
             if (backwardSeries != null) {
-//                graph.removeSeries(backwardSeries);
-//                backwardSeries = new LineGraphSeries<>(negatedBackwardData.toArray(new DataPoint[0]));
-//                graph.addSeries(backwardSeries);
-                backwardSeries.resetData(negatedForwardData.toArray(new DataPoint[0]));
+                graph.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        graph.removeSeries(backwardSeries);
+                        backwardSeries = new LineGraphSeries<>(negatedBackwardData.toArray(new DataPoint[0]).clone());
+                        graph.addSeries(backwardSeries);
+                    }
+                });
             }
         } else {
             forwardData.add(dataPoint);
             negatedForwardData.add(new DataPoint(-1*dataPoint.getX(), dataPoint.getY()));
             if (forwardSeries != null) {
-//                graph.removeSeries(forwardSeries);
-//                forwardSeries = new LineGraphSeries<>(negatedForwardData.toArray(new DataPoint[0]));
-//                graph.addSeries(forwardSeries);
-                forwardSeries.appendData(new DataPoint(-1*dataPoint.getX(), dataPoint.getY()), false, numberOfPoints);
+                graph.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        graph.removeSeries(forwardSeries);
+                        forwardSeries = new LineGraphSeries<>(negatedForwardData.toArray(new DataPoint[0]).clone());
+                        graph.addSeries(forwardSeries);
+                    }
+                });
             }
         }
     }
@@ -151,10 +185,6 @@ public class Graph {
     }
 
     public ArrayList<DataPoint> getBackwardData(){
-//        ArrayList<DataPoint> reversedData = new ArrayList<>();
-//        for (int i = backwardData.size()-1; i >= 0; i++)
-//            reversedData.add(backwardData.get(i));
-//        return reversedData;
         return backwardData;
     }
 
@@ -164,5 +194,13 @@ public class Graph {
 
     public double getOffset(){
         return  offset;
+    }
+
+    public void putData(double x, double y){
+        try {
+            dataPoints.put(new DataPoint(x,y));
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
     }
 }

@@ -67,9 +67,9 @@ public class ExperimentRuntime extends AppCompatActivity {
             if (!highV.equals("") && !lowV.equals("")) {
                 highVolt = Double.parseDouble(highV);
                 lowVolt = Double.parseDouble(lowV);
-                graph = new Graph(graphView, viewport, interval, lowVolt, highVolt);
+                graph = new Graph(graphView, lowVolt, highVolt);
             } else
-                graph = new Graph(graphView, viewport, interval);
+                graph = new Graph(graphView);
 
             finalVoltage.setText(saved.getString(AdvancedSetup.FINAL_VOLTAGE, loadFailed));
             polarity.setText(saved.getString(AdvancedSetup.POLARITY_TOGGLE, loadFailed));
@@ -89,7 +89,7 @@ public class ExperimentRuntime extends AppCompatActivity {
                 findViewById(R.id.auxRecordingEnabled).setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
-            graph = new Graph(graphView, viewport, interval);
+            graph = new Graph(graphView);
         }
     }
 
