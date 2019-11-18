@@ -15,6 +15,16 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class ExperimentRuntime extends AppCompatActivity {
     TextView initialVoltage, highVoltage, lowVoltage, finalVoltage, polarity, scanRate,
     sampleInterval, quietTime, sensitivity, sweepSegments;
@@ -95,10 +105,13 @@ public class ExperimentRuntime extends AppCompatActivity {
         }
 
         Bundle data = getIntent().getExtras();
-        String filePath = data.getString("filePath");
-        if (filePath != null){
-            //graph data
+        if (data != null) {
+            String filePath = data.getString("filePath");
+            if (filePath != null){
+                loadData(filePath);
+            }
         }
+
     }
 
     public void onClick(View view){
@@ -116,6 +129,56 @@ public class ExperimentRuntime extends AppCompatActivity {
             export.putExtra("voltage", voltage);
             export.putExtra("current", current);
             startActivity(export);
+        }
+    }
+
+    protected void loadData(String filePath){
+        FileInputStream is = null;
+        try {
+            is = new FileInputStream(new File(filePath));
+            Workbook wb = new HSSFWorkbook(is);
+            Sheet sheet = wb.getSheetAt(0);
+            Cell c;
+            int rowIndex = 0;
+            initialVoltage.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            highVoltage.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            lowVoltage.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            finalVoltage.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            polarity.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            scanRate.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            sweepSegments.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            sampleInterval.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            quietTime.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            sensitivity.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            autoSens = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            finalE = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            auxRecord = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            if(autoSens)
+                findViewById(R.id.autoSensEnabled).setVisibility(View.VISIBLE);
+            if(finalE)
+                findViewById(R.id.finalEEnabled).setVisibility(View.VISIBLE);
+            if(auxRecord)
+                findViewById(R.id.auxRecordingEnabled).setVisibility(View.VISIBLE);
+
+            rowIndex += 2;
+            Row row = sheet.getRow(rowIndex);
+            while(row != null && !row.getCell(0).getStringCellValue().equals("")){
+                double x = Double.parseDouble(row.getCell(0).getStringCellValue());
+                double y = Double.parseDouble(row.getCell(1).getStringCellValue());
+                graph.putData(x,y);
+                rowIndex++;
+                row = sheet.getRow(rowIndex);
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        } finally {
+            if (is != null){
+                try {
+                    is.close();
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

@@ -24,7 +24,7 @@ public class AdvancedSetup extends AppCompatActivity {
     ToggleButton polarityToggle;
     CheckBox isAutoSens, isFinalE, isAuxRecording;
     Boolean polarity;
-    public static final String INITIAL_VOLTAGE = "INITIAL VOLTAGE";
+    public static final String INITIAL_VOLTAGE = "initialVoltage";
     public static final String HIGH_VOLTAGE = "highVoltage";
     public static final String LOW_VOLTAGE = "lowVoltage";
     public static final String FINAL_VOLTAGE = "finalVoltage";

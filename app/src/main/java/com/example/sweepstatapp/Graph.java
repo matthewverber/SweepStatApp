@@ -6,6 +6,15 @@ import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -200,6 +209,26 @@ public class Graph {
             dataPoints.put(new DataPoint(x,y));
         } catch (InterruptedException e){
             e.printStackTrace();
+        }
+    }
+
+    public void loadData(String filePath){
+        FileInputStream is = null;
+        try {
+            is = new FileInputStream(new File(filePath));
+            Workbook wb = new HSSFWorkbook(is);
+            Sheet sheet = wb.getSheetAt(0);
+            Row row = sheet.getRow(0);
+        } catch (IOException e){
+            e.printStackTrace();
+        } finally {
+            if (is != null){
+                try {
+                    is.close();
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

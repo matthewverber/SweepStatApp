@@ -28,22 +28,28 @@ public class LoadData extends AppCompatActivity {
 
         LinearLayout buttonLayout = findViewById(R.id.buttons);
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        for (File dataSheet: DIR.listFiles()) {
-            if (dataSheet.isDirectory())
-                continue;
-            final String fileName = dataSheet.getName().substring(0,dataSheet.getName().length()-4);
-            Button button = new Button(this);
-            button.setText(fileName);
-            button.setTag(fileName);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent graph = new Intent(LoadData.this, ExperimentRuntime.class);
-                    graph.putExtra("loadFile", fileName);
-                    startActivity(graph);
+        if (DIR.exists() && DIR.listFiles() != null) {
+            for (File dataSheet : DIR.listFiles()) {
+                if (dataSheet.isDirectory())
+                    continue;
+                if (dataSheet.getName().endsWith(".xls")) {
+                    final String fileName = dataSheet.getName().substring(0, dataSheet.getName().length() - 4);
+                    Button button = new Button(this);
+                    button.setText(fileName);
+                    button.setTag(fileName);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent graph = new Intent(LoadData.this, ExperimentRuntime.class);
+                            graph.putExtra("loadFile", fileName + ".xls");
+                            startActivity(graph);
+                        }
+                    });
+                    buttonLayout.addView(button, p);
                 }
-            });
-            buttonLayout.addView(button,p);
+            }
+        } else {
+            findViewById(R.id.noSavedData).setVisibility(View.VISIBLE);
         }
     }
 }
