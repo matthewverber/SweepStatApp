@@ -151,7 +151,7 @@ public class Export extends AppCompatActivity {
             parameters[1][8] = saved.getString(AdvancedSetup.QUIET_TIME, loadFailed);
             parameters[1][9] = saved.getString(AdvancedSetup.SENSITIVITY, loadFailed);
             parameters[1][10] = saved.getBoolean(AdvancedSetup.IS_AUTOSENS, false)+"";
-            parameters[1][11] = saved.getBoolean(AdvancedSetup.IS_FINALE, true)+"";
+            parameters[1][11] = saved.getBoolean(AdvancedSetup.IS_FINALE, false)+"";
             parameters[1][12] = saved.getBoolean(AdvancedSetup.IS_AUX_RECORDING, false)+"";
 
             for (int i = 0; i < parameters[1].length; i++, nextRow++){
