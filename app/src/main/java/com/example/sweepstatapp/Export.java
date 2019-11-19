@@ -32,8 +32,8 @@ public class Export extends AppCompatActivity {
 
     double[] voltage, current;
     final static String SWEEPSTAT = "SweepStat";
-    final File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
-    final File TEMP_DIR = new File(DIR,"temp");
+    final static File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
+    final static File TEMP_DIR = new File(DIR,"temp");
     int action = -1;
     private static final int LOCAL = 0;
     private static final int EXPORT = 1;
@@ -177,7 +177,7 @@ public class Export extends AppCompatActivity {
             c = row.createCell(0);
             c.setCellValue(voltage[i]);
             c = row.createCell(1);
-            c.setCellValue(current[i]);
+            c.setCellValue(String.format("%3.2E", current[i]));
         }
 
         sheet.setColumnWidth(0, 20*256);
