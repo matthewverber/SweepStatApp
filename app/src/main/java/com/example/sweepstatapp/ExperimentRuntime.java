@@ -49,10 +49,8 @@ public class ExperimentRuntime extends AppCompatActivity {
         viewport.setScrollableY(true);
         viewport.setScalable(true);
         viewport.setScalableY(true);
-        viewport.setYAxisBoundsManual(true);
         viewport.setXAxisBoundsManual(true);
-        viewport.setMinY(-1);
-        viewport.setMaxY(1);
+        viewport.setYAxisBoundsManual(true);
         viewport.setMinX(-1);
         viewport.setMaxX(1);
 
@@ -69,49 +67,47 @@ public class ExperimentRuntime extends AppCompatActivity {
         autoSens = false;
         finalE = false;
         auxRecord = false;
-        if(saved != null){
-            initialVoltage.setText(saved.getString(AdvancedSetup.INITIAL_VOLTAGE, loadFailed));
-
-            String highV = saved.getString(AdvancedSetup.HIGH_VOLTAGE, loadFailed);
-            String lowV = saved.getString(AdvancedSetup.LOW_VOLTAGE, loadFailed);
-            highVoltage.setText(highV);
-            lowVoltage.setText(lowV);
-            if (!highV.equals("") && !lowV.equals("")) {
-                highVolt = Double.parseDouble(highV);
-                lowVolt = Double.parseDouble(lowV);
-                graph = new Graph(graphView, lowVolt, highVolt);
-            } else
-                graph = new Graph(graphView);
-
-            finalVoltage.setText(saved.getString(AdvancedSetup.FINAL_VOLTAGE, loadFailed));
-            polarity.setText(saved.getString(AdvancedSetup.POLARITY_TOGGLE, loadFailed));
-            scanRate.setText(saved.getString(AdvancedSetup.SCAN_RATE, loadFailed));
-            sweepSegments.setText(saved.getString(AdvancedSetup.SWEEP_SEGS, loadFailed));
-            sampleInterval.setText(saved.getString(AdvancedSetup.SAMPLE_INTEVAL, loadFailed));
-            quietTime.setText(saved.getString(AdvancedSetup.QUIET_TIME, loadFailed));
-            sensitivity.setText(saved.getString(AdvancedSetup.SENSITIVITY, loadFailed));
-            autoSens = saved.getBoolean(AdvancedSetup.IS_AUTOSENS, false);
-            finalE = saved.getBoolean(AdvancedSetup.IS_FINALE, true);
-            auxRecord = saved.getBoolean(AdvancedSetup.IS_AUX_RECORDING, false);
-            if(autoSens)
-                findViewById(R.id.autoSensEnabled).setVisibility(View.VISIBLE);
-            if(finalE)
-                findViewById(R.id.finalEEnabled).setVisibility(View.VISIBLE);
-            if(auxRecord)
-                findViewById(R.id.auxRecordingEnabled).setVisibility(View.VISIBLE);
-        } else {
-            Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
-            graph = new Graph(graphView);
-        }
 
         Bundle data = getIntent().getExtras();
-        if (data != null) {
-            String filePath = data.getString("filePath");
-            if (filePath != null){
-                loadData(filePath);
+        if (data != null && data.getString("loadFile") != null) {
+            String filePath = data.getString("loadFile");
+            loadData(filePath);
+        } else {
+            if (saved != null) {
+                initialVoltage.setText(saved.getString(AdvancedSetup.INITIAL_VOLTAGE, loadFailed));
+
+                String highV = saved.getString(AdvancedSetup.HIGH_VOLTAGE, loadFailed);
+                String lowV = saved.getString(AdvancedSetup.LOW_VOLTAGE, loadFailed);
+                highVoltage.setText(highV);
+                lowVoltage.setText(lowV);
+                if (!highV.equals("") && !lowV.equals("")) {
+                    highVolt = Double.parseDouble(highV);
+                    lowVolt = Double.parseDouble(lowV);
+                    graph = new Graph(graphView, lowVolt, highVolt);
+                } else
+                    graph = new Graph(graphView);
+
+                finalVoltage.setText(saved.getString(AdvancedSetup.FINAL_VOLTAGE, loadFailed));
+                polarity.setText(saved.getString(AdvancedSetup.POLARITY_TOGGLE, loadFailed));
+                scanRate.setText(saved.getString(AdvancedSetup.SCAN_RATE, loadFailed));
+                sweepSegments.setText(saved.getString(AdvancedSetup.SWEEP_SEGS, loadFailed));
+                sampleInterval.setText(saved.getString(AdvancedSetup.SAMPLE_INTEVAL, loadFailed));
+                quietTime.setText(saved.getString(AdvancedSetup.QUIET_TIME, loadFailed));
+                sensitivity.setText(saved.getString(AdvancedSetup.SENSITIVITY, loadFailed));
+                autoSens = saved.getBoolean(AdvancedSetup.IS_AUTOSENS, false);
+                finalE = saved.getBoolean(AdvancedSetup.IS_FINALE, true);
+                auxRecord = saved.getBoolean(AdvancedSetup.IS_AUX_RECORDING, false);
+                if (autoSens)
+                    findViewById(R.id.autoSensEnabled).setVisibility(View.VISIBLE);
+                if (finalE)
+                    findViewById(R.id.finalEEnabled).setVisibility(View.VISIBLE);
+                if (auxRecord)
+                    findViewById(R.id.auxRecordingEnabled).setVisibility(View.VISIBLE);
+            } else {
+                Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
+                graph = new Graph(graphView);
             }
         }
-
     }
 
     public void onClick(View view){
@@ -135,7 +131,7 @@ public class ExperimentRuntime extends AppCompatActivity {
     protected void loadData(String filePath){
         FileInputStream is = null;
         try {
-            is = new FileInputStream(new File(filePath));
+            is = new FileInputStream(new File(Export.DIR, filePath));
             Workbook wb = new HSSFWorkbook(is);
             Sheet sheet = wb.getSheetAt(0);
             Cell c;
@@ -162,14 +158,19 @@ public class ExperimentRuntime extends AppCompatActivity {
 
             rowIndex += 2;
             Row row = sheet.getRow(rowIndex);
-            while(row != null && !row.getCell(0).getStringCellValue().equals("")){
-                double x = Double.parseDouble(row.getCell(0).getStringCellValue());
+            GraphView graphView = findViewById(R.id.graph);
+            graph = new Graph(graphView, Double.parseDouble(lowVoltage.getText()+""), Double.parseDouble(highVoltage.getText()+""));
+            while(row != null && !row.getCell(1).getStringCellValue().equals("")){
+                double x = row.getCell(0).getNumericCellValue();
                 double y = Double.parseDouble(row.getCell(1).getStringCellValue());
+                //                double y = row.getCell(1).getNumericCellValue();
                 graph.putData(x,y);
                 rowIndex++;
                 row = sheet.getRow(rowIndex);
             }
         } catch (IOException e){
+            e.printStackTrace();
+        } catch (IllegalStateException e){
             e.printStackTrace();
         } finally {
             if (is != null){
