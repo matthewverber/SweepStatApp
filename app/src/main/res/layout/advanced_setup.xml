@@ -370,7 +370,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:layout_weight="1"
-        android:onClick="saveConfiguration"
+        android:onClick="exportConfiguration"
         android:text="Export Configuration"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

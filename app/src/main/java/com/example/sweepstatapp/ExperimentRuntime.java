@@ -320,6 +320,8 @@ public class ExperimentRuntime extends AppCompatActivity {
         Sheet sheet = wb.createSheet("data");
         Row row;
 
+        if (parameters == null)
+            setParameters();
         for (int i = 0; i < parameters[1].length; i++, nextRow++) {
             row = sheet.createRow(nextRow);
             c = row.createCell(0);

@@ -20,9 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -147,6 +144,14 @@ public class AdvancedSetup extends AppCompatActivity {
         ExperimentRuntime.verifyStoragePermissions(this);
         CONFIGURATION_DIR.mkdirs();
         showEnterFileName(this, ExperimentRuntime.LOCAL);
+    }
+
+    public void exportConfiguration(View view){
+        if (!ExperimentRuntime.isExternalStorageAvailable() || ExperimentRuntime.isExternalStorageReadOnly())
+            return;
+        ExperimentRuntime.verifyStoragePermissions(this);
+        CONFIGURATION_DIR.mkdirs();
+        showEnterFileName(this, ExperimentRuntime.EXPORT);
     }
 
     private void showEnterFileName(final Context c, final int action) {
