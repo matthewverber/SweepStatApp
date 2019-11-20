@@ -37,8 +37,6 @@ public class DeviceListActivity extends AppCompatActivity {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
-
-
     private TextView mCurrentlyConnectedTextView;
     private LeDeviceListAdapter mLeDeviceListAdapter;
 
@@ -68,8 +66,38 @@ public class DeviceListActivity extends AppCompatActivity {
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBtAdapter = bluetoothManager.getAdapter();
 
+        TextView tmp = findViewById(R.id.title_currently_connected);
+        tmp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "attempting set notif true");
+                Intent inten = new Intent();
+                inten.setAction(BluetoothLeConnectionService.GATT_SET_NOTIFICATION);
+                inten.setClass(getApplicationContext(), BluetoothLeConnectionService.class);
+                inten.putExtra("enabled", true);
+                startService(inten);
+            }
+        });
+
         // Initialize textview for currently_connected
         mCurrentlyConnectedTextView = findViewById(R.id.currently_connected);
+        mCurrentlyConnectedTextView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                try {
+                    Log.d(TAG, "attempting write");
+                    Intent intent = new Intent();
+                    intent.setAction(BluetoothLeConnectionService.GATT_WRITE_MESSAGE);
+                    intent.setClass(getApplicationContext(), BluetoothLeConnectionService.class);
+                    intent.putExtra("message", "qwerty");
+                    startService(intent);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "failed write");
+                }
+            }
+        });
 
         // set the text for current status message
         if (mBtAdapter == null) {
@@ -93,7 +121,7 @@ public class DeviceListActivity extends AppCompatActivity {
         ListView availableDevicesListView = findViewById(R.id.available_devices);
         mLeDeviceListAdapter = new LeDeviceListAdapter(this, new ArrayList<BluetoothDevice>());
         availableDevicesListView.setAdapter(mLeDeviceListAdapter);
-        //availableDevicesListView.setOnItemClickListener(mDeviceClickListener);
+        availableDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
         // Get a set of currently paired devices
         // TODO: Get and add the set of previously paired devices
@@ -196,15 +224,15 @@ public class DeviceListActivity extends AppCompatActivity {
             };
 
 
-    public void onClick(View v) {
-        try {
-            Log.d(TAG, "attempting write");
-            //bcs.write("hey".getBytes());
-        } catch (Exception e) {
-            Log.e(TAG, "failed write");
-        }
-
-    }
+//    public void onClick(View v) {
+//        try {
+//            Log.d(TAG, "attempting write");
+//            //bcs.write("hey".getBytes());
+//        } catch (Exception e) {
+//            Log.e(TAG, "failed write");
+//        }
+//
+//    }
 
 
     /**
@@ -217,11 +245,13 @@ public class DeviceListActivity extends AppCompatActivity {
 
             // Get the BluetoothDevice object
             BluetoothDevice btdevice = mLeDeviceListAdapter.getDevice(pos);
-            //Log.d(TAG, "mac address valid: "+BluetoothAdapter.checkBluetoothAddress(address));
+            Intent intent = new Intent();
+            intent.setAction(BluetoothLeConnectionService.GATT_START_CONNECTION);
+            intent.setClass(getApplicationContext(), BluetoothLeConnectionService.class);
+            intent.putExtra( "address", btdevice.getAddress() );
 
-            //BluetoothConnectionService bcs = BluetoothConnectionService.getInstance();
-            //BluetoothDevice device = mBtAdapter.getRemoteDevice(address);
-            //bcs.startClient(device);
+            startService(intent);
+
 /*
             // Create the result Intent and include the MAC address
             Intent intent = new Intent();
