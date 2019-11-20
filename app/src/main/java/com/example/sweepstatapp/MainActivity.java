@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.loadConfig){
             // open config loader, can be new intent and return to initial or experiment view
             // not complete for walking skeleton
+            Intent loadConfiguration = new Intent(this, LoadConfiguration.class);
+            startActivity(loadConfiguration);
         }
 
         else if(id == R.id.recentResults){
