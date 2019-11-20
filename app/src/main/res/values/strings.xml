@@ -71,4 +71,5 @@
     <string name="scan_rate_prompt_text">Please enter your desired scan rate:</string>
     <string name="scan_rate_simple">Scan Rate</string>
     <string name="excellent_finalize">Excellent! We are now ready to make the measurement. If you have not done so already, please place the counter/reference electrode in the solution and connect the black clip. Then, place the working electrode in the solution and connect the red clip. It is important to place these electrodes in the solution before connecting the clips to reduce the likelihood of static discharge damaging the electrodes.</string>
+    <string name="save_locally">Save Locally</string>
 </resources>

@@ -62,10 +62,10 @@
             android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="@string/initial_potential"
-            android:inputType="numberDecimal"
+            android:importantForAutofill="no"
+            android:inputType="numberSigned|numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/initial_vertex_potential_prompt"
-            android:importantForAutofill="no" />
+            app:layout_constraintTop_toBottomOf="@+id/initial_vertex_potential_prompt" />
 
         <EditText
             android:id="@+id/vertex_Potential"
@@ -75,10 +75,10 @@
             android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="@string/vertex_potential"
-            android:inputType="numberDecimal"
+            android:importantForAutofill="no"
+            android:inputType="numberSigned|numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/initial_Potential"
-            android:importantForAutofill="no" />
+            app:layout_constraintTop_toBottomOf="@+id/initial_Potential" />
 
         <Button
             android:id="@+id/nextButtonScreen9"
