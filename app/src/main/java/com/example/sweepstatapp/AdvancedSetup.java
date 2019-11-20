@@ -5,13 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +20,6 @@ public class AdvancedSetup extends AppCompatActivity {
     Button finish;
     Spinner sensitivity;
     EditText initialVoltage, highVoltage, lowVoltage, finalVoltage, scanRate, sweepSegs, sampleInterval, quietTime;
-    ToggleButton polarityToggle;
     CheckBox isAutoSens, isFinalE, isAuxRecording;
     Boolean polarity;
 
@@ -29,13 +27,16 @@ public class AdvancedSetup extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.advanced_setup);
-        finish = findViewById(R.id.finishAdvanced);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
 
+        finish = findViewById(R.id.finishAdvanced);
         initialVoltage = findViewById(R.id.initialVoltage);
         highVoltage = findViewById(R.id.highVoltage);
         lowVoltage = findViewById(R.id.lowVoltage);
         finalVoltage = findViewById(R.id.finalVoltage);
-        polarityToggle = findViewById(R.id.polarity);
         scanRate = findViewById(R.id.scanRate);
         sweepSegs = findViewById(R.id.sweepSegments);
         sampleInterval = findViewById(R.id.sampleInterval);
@@ -46,15 +47,6 @@ public class AdvancedSetup extends AppCompatActivity {
         isAuxRecording = findViewById(R.id.isAuxSignalRecording);
         polarity = true;
 
-        polarityToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                polarity = !b;
-            }
-        });
-        if(getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }
     }
 
     public void verifyEntries(View view){
@@ -63,7 +55,13 @@ public class AdvancedSetup extends AppCompatActivity {
             String highV = (highVoltage.getText().toString());
             String lowV = (lowVoltage.getText().toString());
             String finalV = (finalVoltage.getText().toString());
-            String polarity = polarityToggle.getText().toString();
+            String polarity;
+            if(initialVoltage.getText().toString().contains("-")){
+                polarity = "Negative";
+            }
+            else{
+                polarity = "Positive";
+            }
             String scanrate = (scanRate.getText().toString());
             String segments = (sweepSegs.getText().toString());
             String interval = (sampleInterval.getText().toString());
@@ -73,6 +71,9 @@ public class AdvancedSetup extends AppCompatActivity {
             boolean isFinal = isFinalE.isChecked();
             boolean isAux = isAuxRecording.isChecked();
 
+            if (initialV.equals("") || highV.equals("") || lowV.equals("") || finalV.equals("") || scanrate.equals("") || segments.equals("") || interval.equals("") || quiettime.equals("")){
+                throw new Exception("User did not define all parameters");
+            }
             SharedPreferences saved = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
             SharedPreferences.Editor saver = saved.edit();
             saver.putString(ExperimentRuntime.INITIAL_VOLTAGE, initialV);
@@ -89,9 +90,11 @@ public class AdvancedSetup extends AppCompatActivity {
             saver.putBoolean("isFinalE", isFinal);
             saver.putBoolean("isAuxRecording", isAux);
             saver.apply();
+
+
             Intent goToRuntime = new Intent(this, ExperimentRuntime.class);
             startActivity(goToRuntime);
-//            this.finish();
+
         } catch (Exception e){
             e.printStackTrace();
             Toast.makeText(this, "Please make entries for all parameters!", Toast.LENGTH_SHORT).show();

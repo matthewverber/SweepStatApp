@@ -1,7 +1,5 @@
 package com.example.sweepstatapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +7,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        SharedPreferences prefs = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
+        //SharedPreferences prefs = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
 
     }
 
@@ -36,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
      * In the cases of any navigation buttons this will change views accordingly
      * In the case of configurations this will open a new intent displaying options
      */
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences.Editor editor = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+    }
 
     public void onClick(View view){
 
