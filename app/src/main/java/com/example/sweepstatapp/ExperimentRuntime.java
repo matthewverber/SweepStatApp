@@ -52,9 +52,11 @@ public class ExperimentRuntime extends AppCompatActivity {
     double[] voltage, current;
     final static String SWEEPSTAT = "SweepStat";
     final static File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
-    final static File TEMP_DIR = new File(DIR,"temp");
-    private static final int LOCAL = 0;
-    private static final int EXPORT = 1;
+    final static File DATA_DIR = new File(DIR, "Data");
+    final static File CONFIGURATION_DIR = new File(DIR, "Configuration");
+    final static File TEMP_DIR = new File(DATA_DIR,"temp");
+    static final int LOCAL = 0;
+    static final int EXPORT = 1;
 
 
     @Override
@@ -142,16 +144,17 @@ public class ExperimentRuntime extends AppCompatActivity {
             if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
                 return;
             verifyStoragePermissions(this);
-            DIR.mkdirs();
+            DATA_DIR.mkdirs();
             showEnterFileName(this, LOCAL);
         } else if (view.getId() == R.id.export){
             if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
                 return;
             verifyStoragePermissions(this);
-            DIR.mkdirs();
+            DATA_DIR.mkdirs();
             showEnterFileName(this, EXPORT);
         }
     }
+
     public static void verifyStoragePermissions(Activity activity) {
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -176,7 +179,7 @@ public class ExperimentRuntime extends AppCompatActivity {
     protected void loadData(String filePath){
         FileInputStream is = null;
         try {
-            is = new FileInputStream(new File(DIR, filePath));
+            is = new FileInputStream(new File(DATA_DIR, filePath));
             Workbook wb = new HSSFWorkbook(is);
             Sheet sheet = wb.getSheetAt(0);
             Cell c;
@@ -205,10 +208,11 @@ public class ExperimentRuntime extends AppCompatActivity {
             Row row = sheet.getRow(rowIndex);
             GraphView graphView = findViewById(R.id.graph);
             graph = new Graph(graphView, Double.parseDouble(lowVoltage.getText()+""), Double.parseDouble(highVoltage.getText()+""));
-            while(row != null && !row.getCell(1).getStringCellValue().equals("")){
+//            while(row != null && !row.getCell(1).getStringCellValue().equals("")){
+            while(row != null){
                 double x = row.getCell(0).getNumericCellValue();
-                double y = Double.parseDouble(row.getCell(1).getStringCellValue());
-                //                double y = row.getCell(1).getNumericCellValue();
+//                double y = Double.parseDouble(row.getCell(1).getStringCellValue());
+                double y = row.getCell(1).getNumericCellValue();
                 graph.putData(x,y);
                 rowIndex++;
                 row = sheet.getRow(rowIndex);
@@ -278,11 +282,11 @@ public class ExperimentRuntime extends AppCompatActivity {
                             if (fileName == null || fileName.equals(""))
                                 return;
 
-                            file = new File(DIR, fileName + ".xls");
+                            file = new File(DATA_DIR, fileName + ".xls");
                             if (file.exists()){
                                 int i = 1;
                                 do{
-                                    file = new File(DIR, fileName + '(' + i +").xls");
+                                    file = new File(DATA_DIR, fileName + '(' + i +").xls");
                                     i++;
                                 } while (file.exists());
                             }
@@ -345,7 +349,8 @@ public class ExperimentRuntime extends AppCompatActivity {
             c = row.createCell(0);
             c.setCellValue(voltage[i]);
             c = row.createCell(1);
-            c.setCellValue(String.format("%3.2E", current[i]));
+            c.setCellValue(current[i]);
+//            c.setCellValue(String.format("%3.2E", current[i]));
         }
 
         sheet.setColumnWidth(0, 20*256);
