@@ -395,7 +395,16 @@
                     android:textSize="12sp" />
 
                 <Button
-                    android:id="@+id/exportRes"
+                    android:id="@+id/local"
+                    style="@style/TextAppearance.AppCompat.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Local"
+                    android:onClick="onClick"
+                    android:textSize="12sp" />
+                <Button
+                    android:id="@+id/export"
                     style="@style/TextAppearance.AppCompat.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
