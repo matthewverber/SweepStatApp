@@ -15,16 +15,16 @@ import java.util.ArrayList;
 
 public class LoadData extends AppCompatActivity {
 
-    File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), Export.SWEEPSTAT);
+    File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), ExperimentRuntime.SWEEPSTAT);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_data);
 
-        if (!Export.isExternalStorageAvailable() || Export.isExternalStorageReadOnly())
+        if (!ExperimentRuntime.isExternalStorageAvailable() || ExperimentRuntime.isExternalStorageReadOnly())
             return;
-        Export.verifyStoragePermissions(this);
+        ExperimentRuntime.verifyStoragePermissions(this);
 
         LinearLayout buttonLayout = findViewById(R.id.buttons);
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

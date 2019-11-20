@@ -1,14 +1,25 @@
 package com.example.sweepstatapp;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
@@ -21,6 +32,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ExperimentRuntime extends AppCompatActivity {
@@ -29,10 +41,23 @@ public class ExperimentRuntime extends AppCompatActivity {
     Boolean autoSens, finalE, auxRecord;
     String loadFailed = "Not currently enabled";
     double lowVolt, highVolt;
+    String[][] parameters;
     private Graph graph = null;
     private int numOfPoints = 10;
     private long interval = 20;
     SharedPreferences saved;
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    double[] voltage, current;
+    final static String SWEEPSTAT = "SweepStat";
+    final static File DIR = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), SWEEPSTAT);
+    final static File TEMP_DIR = new File(DIR,"temp");
+    private static final int LOCAL = 0;
+    private static final int EXPORT = 1;
 
 
     @Override
@@ -105,6 +130,7 @@ public class ExperimentRuntime extends AppCompatActivity {
                     findViewById(R.id.finalEEnabled).setVisibility(View.VISIBLE);
                 if (auxRecord)
                     findViewById(R.id.auxRecordingEnabled).setVisibility(View.VISIBLE);
+                setParameters();
             } else {
                 Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
                 graph = new Graph(graphView);
@@ -115,25 +141,45 @@ public class ExperimentRuntime extends AppCompatActivity {
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){
            graph.drawOnFakeData();
-        } else if (view.getId() == R.id.exportRes) {
-            DataPoint[] dataPoint = graph.getFullData().toArray(new DataPoint[0]);
-            double[] voltage = new double[dataPoint.length];
-            double[] current = new double[dataPoint.length];
-            for (int i = 0; i < dataPoint.length; i++){
-                voltage[i] = dataPoint[i].getX();
-                current[i] = dataPoint[i].getY();
-            }
-            Intent export = new Intent(this, Export.class);
-            export.putExtra("voltage", voltage);
-            export.putExtra("current", current);
-            startActivity(export);
+        } else if (view.getId() == R.id.local){
+            if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
+                return;
+            verifyStoragePermissions(this);
+            DIR.mkdirs();
+            showEnterFileName(this, LOCAL);
+        } else if (view.getId() == R.id.export){
+            if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
+                return;
+            verifyStoragePermissions(this);
+            DIR.mkdirs();
+            showEnterFileName(this, EXPORT);
         }
+    }
+    public static void verifyStoragePermissions(Activity activity) {
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+
+    public static boolean isExternalStorageReadOnly(){
+        String extStorageState = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState);
+    }
+
+    public static boolean isExternalStorageAvailable(){
+        String extStorageState = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(extStorageState);
     }
 
     protected void loadData(String filePath){
         FileInputStream is = null;
         try {
-            is = new FileInputStream(new File(Export.DIR, filePath));
+            is = new FileInputStream(new File(DIR, filePath));
             Workbook wb = new HSSFWorkbook(is);
             Sheet sheet = wb.getSheetAt(0);
             Cell c;
@@ -181,6 +227,173 @@ public class ExperimentRuntime extends AppCompatActivity {
                 } catch (IOException e){
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    private String[][] setParameters(){
+        parameters = new String[2][13];
+        parameters[0][0] = AdvancedSetup.INITIAL_VOLTAGE;
+        parameters[0][1] = AdvancedSetup.HIGH_VOLTAGE;
+        parameters[0][2] = AdvancedSetup.LOW_VOLTAGE;
+        parameters[0][3] = AdvancedSetup.FINAL_VOLTAGE;
+        parameters[0][4] = AdvancedSetup.POLARITY_TOGGLE;
+        parameters[0][5] = AdvancedSetup.SCAN_RATE;
+        parameters[0][6] = AdvancedSetup.SWEEP_SEGS;
+        parameters[0][7] = AdvancedSetup.SAMPLE_INTEVAL;
+        parameters[0][8] = AdvancedSetup.QUIET_TIME;
+        parameters[0][9] = AdvancedSetup.SENSITIVITY;
+        parameters[0][10] = AdvancedSetup.IS_AUTOSENS;
+        parameters[0][11] = AdvancedSetup.IS_FINALE;
+        parameters[0][12] = AdvancedSetup.IS_AUX_RECORDING;
+
+        parameters[1][0] = initialVoltage.getText()+"";
+        parameters[1][1] = highVoltage.getText()+"";
+        parameters[1][2] = lowVoltage.getText()+"";
+        parameters[1][3] = finalVoltage.getText()+"";
+        parameters[1][4] = polarity.getText()+"";
+        parameters[1][5] = scanRate.getText()+"";
+        parameters[1][6] = sweepSegments.getText()+"";
+        parameters[1][7] = sampleInterval.getText()+"";
+        parameters[1][8] = quietTime.getText()+"";
+        parameters[1][9] = sensitivity.getText()+"";
+        parameters[1][10] = autoSens+"";
+        parameters[1][11] = finalE+"";
+        parameters[1][12] = auxRecord+"";
+        return parameters;
+    }
+
+    private void showEnterFileName(final Context c, final int action) {
+        final EditText fileNameEditText = new EditText(c);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("Enter File Name")
+                .setMessage("Please enter file name:")
+                .setView(fileNameEditText)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (action < LOCAL || action > EXPORT)
+                            return;
+
+                        String fileName = String.valueOf(fileNameEditText.getText());
+                        File file = null;
+                        if (action == LOCAL){
+                            if (fileName == null || fileName.equals(""))
+                                return;
+
+                            file = new File(DIR, fileName + ".xls");
+                            if (file.exists()){
+                                int i = 1;
+                                do{
+                                    file = new File(DIR, fileName + '(' + i +").xls");
+                                    i++;
+                                } while (file.exists());
+                            }
+                        } else if (action == EXPORT){
+                            if (TEMP_DIR.exists())
+                                deleteDir(TEMP_DIR);
+                            else
+                                TEMP_DIR.mkdirs();
+
+                            file = new File(TEMP_DIR,fileName+".xls");
+                        }
+
+                        createExcelFile(file, action);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+    }
+
+    protected File createExcelFile(File file, int action){
+        if (action < LOCAL || action > EXPORT)
+            return null;
+
+        File retVal = null;
+
+        Workbook wb = new HSSFWorkbook();
+        Cell c;
+        int nextRow = 0;
+
+        Sheet sheet = wb.createSheet("data");
+        Row row;
+
+        for (int i = 0; i < parameters[1].length; i++, nextRow++) {
+            row = sheet.createRow(nextRow);
+            c = row.createCell(0);
+            c.setCellValue(parameters[0][i]);
+            c = row.createCell(1);
+            c.setCellValue(parameters[1][i]);
+        }
+
+        sheet.createRow(nextRow);
+        nextRow++;
+        row = sheet.createRow(nextRow);
+        c = row.createCell(0);
+        c.setCellValue("Voltage");
+        c = row.createCell(1);
+        c.setCellValue("Current");
+        nextRow++;
+
+        DataPoint[] dataPoint = graph.getFullData().toArray(new DataPoint[0]);
+        voltage = new double[dataPoint.length];
+        current = new double[dataPoint.length];
+        for (int i = 0; i < dataPoint.length; i++){
+            voltage[i] = dataPoint[i].getX();
+            current[i] = dataPoint[i].getY();
+        }
+        for (int i = 0; i < voltage.length; i++){
+            row = sheet.createRow(i+nextRow);
+            c = row.createCell(0);
+            c.setCellValue(voltage[i]);
+            c = row.createCell(1);
+            c.setCellValue(String.format("%3.2E", current[i]));
+        }
+
+        sheet.setColumnWidth(0, 20*256);
+        sheet.setColumnWidth(1, 20*256);
+
+        FileOutputStream os = null;
+        try {
+            if (!(action == EXPORT && file.exists())){
+                file.createNewFile();
+                os = new FileOutputStream(file);
+                wb.write(os);
+                os.flush();
+                os.close();
+                wb.close();
+                retVal = file;
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        } finally {
+            try {
+                if (os != null){
+                    os.close();
+                }
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        if (action == EXPORT) {
+            Uri path = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("vnd.android.cursor.dir/email");
+            emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+            emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(emailIntent, "Choose where to export"));
+        }
+        return retVal;
+    }
+
+    private void deleteDir(File dir) {
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                deleteDir(file);
+                file.delete();
+            } else {
+                file.delete();
             }
         }
     }
