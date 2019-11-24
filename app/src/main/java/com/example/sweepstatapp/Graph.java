@@ -17,16 +17,16 @@ public class Graph {
     private ArrayList<DataPoint> backwardData = new ArrayList<>();
     private ArrayList<DataPoint> negatedBackwardData = new ArrayList<>();
     private ArrayList<DataPoint> fullData = new ArrayList<>();
-    private double offset = 0;
+    private double offset = 12;
     private GraphView graph;
     private DataPoint dataPoint = null;
     private double highVolt, lowVolt;
     private boolean drawing;
     private boolean reversed;
     private ArrayBlockingQueue<DataPoint> dataPoints;
-    private int scaleFactor = 12;
+    private int scaleFactor = -1000;
     private double maxY, minY;
-    final static double THRESHOLD = 0.0001;
+    private double lastX = -1000;
 
     public Graph(final GraphView graph){
         this.graph = graph;
@@ -46,7 +46,7 @@ public class Graph {
             GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
             gridLabel.setHorizontalAxisTitle("Voltage");
             gridLabel.setVerticalAxisTitle("Current");
-            gridLabel.setNumVerticalLabels(6);
+            gridLabel.setNumVerticalLabels(10);
             gridLabel.setLabelFormatter(new DefaultLabelFormatter() {
                 @Override
                 public String formatLabel(double value, boolean isValueX) {
@@ -103,19 +103,19 @@ public class Graph {
             public void run() {
                 try {
                     for (double j = 1; j < 1.5; j+=0.1) {
-                        for (double i = lowVolt; i <= highVolt; i += 0.01) {
+                        for (double i = lowVolt; i < highVolt; i += 0.01) {
                             putData(i, Math.sin(j * i + offset) / Math.pow(10, 3));
                             Thread.sleep(5);
                         }
-                        for (double i = highVolt; i >= lowVolt; i -= 0.01) {
+                        for (double i = highVolt-0.3; i > lowVolt; i -= 0.01) {
                             putData(i, Math.sin(10 * j * i + offset) / Math.pow(10, 3));
                             Thread.sleep(5);
                         }
-                        for (double i = lowVolt; i <= highVolt; i += 0.01) {
+                        for (double i = lowVolt-0.1; i < highVolt; i += 0.01) {
                             putData(i, Math.sin(5 * j * i + offset) / Math.pow(10, 3));
                             Thread.sleep(5);
                         }
-                        for (double i = highVolt; i >= lowVolt; i -= 0.01) {
+                        for (double i = highVolt-0.2; i > lowVolt; i -= 0.01) {
                             putData(i, Math.sin(10 * j * i + 1 + offset) / Math.pow(10, 3));
                             Thread.sleep(5);
                         }
@@ -161,30 +161,52 @@ public class Graph {
 //            return;
         this.dataPoint = data;
         fullData.add(data);
+        if (scaleFactor == -1000){
+            scaleFactor = (int)Math.log(1/dataPoint.getY());
+            if (scaleFactor > 12)
+                scaleFactor = 12;
+        }
 
-        if(Math.abs(dataPoint.getX() - highVolt) < THRESHOLD) {
+//        if(Math.abs(dataPoint.getX() - highVolt) < THRESHOLD) {
+//            reversed = true;
+//            backwardData = new ArrayList<>();
+//            negatedBackwardData = new ArrayList<>();
+//            backwardSeries = new LineGraphSeries<>();
+//        }
+//        if (Math.abs(dataPoint.getX() - lowVolt) < THRESHOLD) {
+//            reversed = false;
+//            forwardData = new ArrayList<>();
+//            negatedForwardData = new ArrayList<>();
+//            forwardSeries = new LineGraphSeries<>();
+//        }
+
+        if(!reversed && dataPoint.getX() - lastX < 0) {
             reversed = true;
             backwardData = new ArrayList<>();
             negatedBackwardData = new ArrayList<>();
             backwardSeries = new LineGraphSeries<>();
-        }
-        if (Math.abs(dataPoint.getX() - lowVolt) < THRESHOLD) {
+        } else if (reversed && dataPoint.getX() - lastX > 0) {
             reversed = false;
             forwardData = new ArrayList<>();
             negatedForwardData = new ArrayList<>();
             forwardSeries = new LineGraphSeries<>();
         }
+        lastX = dataPoint.getX();
         if (reversed){
             backwardData.add(dataPoint);
             dataPoint = new DataPoint(-1*dataPoint.getX(), dataPoint.getY()*Math.pow(10,scaleFactor));
             negatedBackwardData.add(dataPoint);
             if (dataPoint.getY() > maxY){
                 maxY = dataPoint.getY();
+                graph.getViewport().setYAxisBoundsManual(true);
                 graph.getViewport().setMaxY(maxY);
+                graph.getViewport().setYAxisBoundsManual(false);
             }
             if (dataPoint.getY() < minY){
                 minY = dataPoint.getY();
+                graph.getViewport().setYAxisBoundsManual(true);
                 graph.getViewport().setMinY(minY);
+                graph.getViewport().setYAxisBoundsManual(false);
             }
             if (backwardSeries != null) {
                 graph.post(new Runnable(){
