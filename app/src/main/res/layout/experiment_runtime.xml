@@ -315,7 +315,7 @@
                     android:textSize="14sp" />
 
             </LinearLayout>
-
+<!--
             <LinearLayout
                 android:id="@+id/QuietTimeGroup"
                 android:layout_width="match_parent"
@@ -354,7 +354,7 @@
                     android:textSize="14sp" />
 
             </LinearLayout>
-
+-->
             <LinearLayout
                 android:id="@+id/SensitivityGroup"
                 android:layout_width="match_parent"
@@ -379,17 +379,6 @@
                     android:layout_weight="0"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/loading"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/av"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="0"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/a_v"
                     android:textSize="14sp" />
 
             </LinearLayout>

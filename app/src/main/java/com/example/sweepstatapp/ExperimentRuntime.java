@@ -13,9 +13,9 @@ import com.jjoe64.graphview.Viewport;
 
 public class ExperimentRuntime extends AppCompatActivity {
     TextView initialVoltage, highVoltage, lowVoltage, finalVoltage, polarity, scanRate,
-    sampleInterval, quietTime, sensitivity, sweepSegments;
+    sampleInterval, sensitivity, sweepSegments;
     Boolean autoSens, finalE, auxRecord;
-    String loadFailed = "Load failed!";
+    String loadFailed = "Not currently enabled";
     static final String INITIAL_VOLTAGE = "INITIAL VOLTAGE";
     private Graph graph = null;
     private int numOfPoints = 100;
@@ -49,7 +49,7 @@ public class ExperimentRuntime extends AppCompatActivity {
         scanRate = findViewById(R.id.scanRate);
         sweepSegments = findViewById(R.id.sweepSegments);
         sampleInterval = findViewById(R.id.sampleInterval);
-        quietTime = findViewById(R.id.quietTime);
+//      quietTime = findViewById(R.id.quietTime);
         sensitivity = findViewById(R.id.sensitivity);
         autoSens = false;
         finalE = false;
@@ -65,8 +65,8 @@ public class ExperimentRuntime extends AppCompatActivity {
             scanRate.setText(saved.getString("scanRate", loadFailed));
             sweepSegments.setText(saved.getString("scanSegments", loadFailed));
             sampleInterval.setText(saved.getString("sampleInterval", loadFailed));
-            quietTime.setText(saved.getString("quietTime", loadFailed));
-            sensitivity.setText(saved.getString("sensitivity", loadFailed));
+//          quietTime.setText(saved.getString("quietTime", loadFailed));
+            sensitivity.setText(saved.getString("sensitivity", loadFailed) + "A/V");
             autoSens = saved.getBoolean("isAutoSens", false);
             finalE = saved.getBoolean("isFinalE", true);
             auxRecord = saved.getBoolean("isAuxRecording", false);
@@ -94,7 +94,7 @@ public class ExperimentRuntime extends AppCompatActivity {
             scanRate.setText(saved.getString("scanRate", loadFailed));
             sweepSegments.setText(saved.getString("scanSegments", loadFailed));
             sampleInterval.setText(saved.getString("sampleInterval", loadFailed));
-            quietTime.setText(saved.getString("quietTime", loadFailed));
+//          quietTime.setText(saved.getString("quietTime", loadFailed));
             sensitivity.setText(saved.getString("sensitivity", loadFailed));
             autoSens = saved.getBoolean("isAutoSens", false);
             finalE = saved.getBoolean("isFinalE", true);

@@ -160,6 +160,10 @@ public class GuidedSetup extends AppCompatActivity {
         }
 
         else if(selected == R.id.finalizeSimple){
+            saver.putString("scanSegments", "2");
+            saver.putString("quietTime", "Not Enabled");
+            saver.putString("sampleInterval", "0.001");
+            saver.apply();
             Intent goToRuntime = new Intent(this, ExperimentRuntime.class);
             startActivity(goToRuntime);
         }
