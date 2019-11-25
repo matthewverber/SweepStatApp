@@ -22,7 +22,7 @@ import androidx.annotation.Nullable;
 import java.util.UUID;
 
 public class BluetoothLeConnectionService extends Service {
-    private static final String TAG = "BluetoothLeConnServ";
+    private static final String TAG = "BTLeConnectionServ";
     private Looper serviceLooper;
     private ServiceHandler serviceHandler;
 
@@ -62,6 +62,10 @@ public class BluetoothLeConnectionService extends Service {
             "com.example.bluetooth.le.EXTRA_DATA";
     public final static String RESULT_RUNREADY_STATE =
             "com.example.sweepstat.le.RESULT_RUNREADY_STATE";
+
+    // This is the String message that comes from the Sweepstat. starts with { and ends with }
+    public String asdfbuilt_message;
+    public StringBuilder built_message = new StringBuilder();
 
     // these are the relevant UUIDs for the HM-10 module
     public final static UUID CUSTOM_SERVICE =
@@ -218,6 +222,7 @@ public class BluetoothLeConnectionService extends Service {
         }
 
         @Override
+        // idk what this function is for. dont see it getting called.
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
@@ -243,8 +248,28 @@ public class BluetoothLeConnectionService extends Service {
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
             Log.i(TAG, "onCharacteristicChanged called");
+            // filter by the characteristic we're supposed to listening to
+            if(!CUSTOM_CHARACTERISTIC.equals(characteristic.getUuid())) return;
 
-            broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            String value = new String(characteristic.getValue());
+            Log.d(TAG, "VALUE GOT: " + value);
+
+            for(int i = 0; i < value.length(); i++) {
+                char tmp = value.charAt(i);
+                if(tmp == '{') { // start of a new data point
+                    built_message.setLength(0);
+                }
+                if(tmp != ' ') {
+                    built_message.append(tmp);
+                }
+                if(tmp ==  '}') { // end of data point; to broadcast data
+                    final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
+                    intent.putExtra(EXTRA_DATA, built_message.toString());
+                    sendBroadcast(intent);
+                }
+
+            }
+            //broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
         }
     };
 
