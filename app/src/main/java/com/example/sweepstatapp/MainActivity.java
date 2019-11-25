@@ -59,17 +59,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         else if(id == R.id.ckBluetooth){
+            Intent intent = new Intent(this, DeviceListActivity.class);
+            startActivity(intent);
             // This if statement should be something along the lines of BluetoothManager.getIsItemConnected(BLUETOOTH.whateverthesweepstatis)
             // In order to do this properly, we need to find out what type of device the LEM will register as
-            if(false){
-                Toast.makeText(this, "Device is already connected!", Toast.LENGTH_SHORT).show();
-            }
-            // If LEM is not connected, pressing the button jumps to the device's bluetooth settings
-            else{
-                Intent openBluetooth = new Intent();
-                openBluetooth.setAction(Settings.ACTION_BLUETOOTH_SETTINGS);
-                startActivity(openBluetooth);
-            }
+//            if(false){
+//                Toast.makeText(this, "Device is already connected!", Toast.LENGTH_SHORT).show();
+//            }
+//            // If LEM is not connected, pressing the button jumps to the device's bluetooth settings
+//            else{
+//                Intent openBluetooth = new Intent();
+//                openBluetooth.setAction(Settings.ACTION_BLUETOOTH_SETTINGS);
+//                startActivity(openBluetooth);
+//            }
         }
         else if(id == R.id.about){
             // not complete for walking skeleton
