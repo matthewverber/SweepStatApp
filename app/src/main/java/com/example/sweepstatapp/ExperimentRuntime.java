@@ -3,9 +3,11 @@ package com.example.sweepstatapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -42,6 +44,7 @@ public class ExperimentRuntime extends AppCompatActivity {
     Boolean autoSens, finalE, auxRecord;
     String loadFailed = "Load failed!";
     double lowVolt, highVolt;
+    boolean drawing = false;
     String[][] parameters;
     private Graph graph = null;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -57,6 +60,19 @@ public class ExperimentRuntime extends AppCompatActivity {
     final static File TEMP_DIR = new File(DATA_DIR,"temp");
     static final int LOCAL = 0;
     static final int EXPORT = 1;
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothLeConnectionService.GATT_WRITE_MESSAGE.equals(action) && graph != null) {
+                String[] data = intent.getStringExtra(BluetoothLeConnectionService.EXTRA_DATA).split(",");
+                graph.putData(Double.parseDouble(data[1].substring(data[1].indexOf(":")+1)), Double.parseDouble(data[2].substring(data[2].indexOf(":")+1, data[2].length()-1)));
+            } else if(BluetoothLeConnectionService.FINISH_DRAWING.equals(action) && graph != null){
+                drawing = false;
+            }
+        }
+    };
+    private final IntentFilter filter = new IntentFilter();
 
 
     @Override
@@ -68,6 +84,9 @@ public class ExperimentRuntime extends AppCompatActivity {
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
+        drawing = false;
+        filter.addAction(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE);
+        registerReceiver(receiver, filter);
 
         GraphView graphView = findViewById(R.id.graph);
         Viewport viewport = graphView.getViewport();
@@ -139,7 +158,15 @@ public class ExperimentRuntime extends AppCompatActivity {
 
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){
-           graph.drawOnFakeData();
+//           graph.drawOnFakeData();
+            if (drawing)
+                return;
+            drawing = true;
+            Intent intent = new Intent();
+            intent.setAction(BluetoothLeConnectionService.GATT_WRITE_MESSAGE);
+            intent.setClass(getApplicationContext(), BluetoothLeConnectionService.class);
+            intent.putExtra("message", ".");
+            startService(intent);
         } else if (view.getId() == R.id.local){
             if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
                 return;
@@ -404,5 +431,10 @@ public class ExperimentRuntime extends AppCompatActivity {
 
     public void back(View view){
         this.finish();
+    }
+
+    public void finish(){
+        unregisterReceiver(receiver);
+        super.finish();
     }
 }
