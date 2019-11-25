@@ -4,6 +4,7 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -128,12 +129,11 @@ public class DeviceListActivity extends AppCompatActivity {
         //Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
         // Register for broadcasts
-        //IntentFilter filter = new IntentFilter();
-        //filter.addAction(BluetoothDevice.ACTION_FOUND);
-        //filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothLeConnectionService.ACTION_GATT_CONNECTED);
+        filter.addAction(BluetoothLeConnectionService.ACTION_GATT_DISCONNECTED);
         //filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        // TODO: add intents for all bluetooth status changes, etc
-        //registerReceiver(mReceiver, filter);
+        registerReceiver(mReceiver, filter);
 
         // Request permissions
         int PERMISSION_ALL = 1;
@@ -172,7 +172,7 @@ public class DeviceListActivity extends AppCompatActivity {
         }
 
         // Unregister broadcast listeners
-        // this.unregisterReceiver(mReceiver);
+        this.unregisterReceiver(mReceiver);
     }
 
     private void scanLeDevice(final boolean enable) {
@@ -223,18 +223,6 @@ public class DeviceListActivity extends AppCompatActivity {
                 }
             };
 
-
-//    public void onClick(View v) {
-//        try {
-//            Log.d(TAG, "attempting write");
-//            //bcs.write("hey".getBytes());
-//        } catch (Exception e) {
-//            Log.e(TAG, "failed write");
-//        }
-//
-//    }
-
-
     /**
      * The on-click listener for all devices in the ListViews
      */
@@ -242,6 +230,8 @@ public class DeviceListActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> arg0, View view, int pos, long id) {
             // Cancel discovery because it's costly and we're about to connect
             scanLeDevice(false);
+
+            mCurrentlyConnectedTextView.setText("connecting...");
 
             // Get the BluetoothDevice object
             BluetoothDevice btdevice = mLeDeviceListAdapter.getDevice(pos);
@@ -263,7 +253,7 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     };
 
-    /*
+
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -272,30 +262,44 @@ public class DeviceListActivity extends AppCompatActivity {
             Log.d(TAG, "onReceive intent: " + action);
 
             // When discovery finds a device
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-
-                // Discovery has found a device. Get the BluetoothDevice
-                // object and its info from the Intent.
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if(device != null) {
-                    String deviceName = device.getName();
-                    String deviceHardwareAddress = device.getAddress(); // MAC address
-                    Log.d(TAG, "device found: " + deviceName);
-                    mAvailableDevicesArrayAdapter.add(deviceName + "\n" + deviceHardwareAddress);
+            if(BluetoothLeConnectionService.ACTION_GATT_CONNECTED.equals(action)) {
+                String address = intent.getStringExtra("address");
+                if(address == null) {
+                    Log.wtf(TAG, "connected but did not receive address");
+                    mCurrentlyConnectedTextView.setText("connected. error.");
                 } else {
-                    Toast.makeText(getApplicationContext(),"device is null",Toast.LENGTH_SHORT).show();
+                    String name = mBtAdapter.getRemoteDevice(address).getName();
+                    mCurrentlyConnectedTextView.setText(name+'\n'+address);
                 }
 
-            // When discovery is finished
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                // TODO: toast/text if no devices found
-                // if (mNewDevicesArrayAdapter.getCount() == 0) {
 
-                Toast.makeText(getApplicationContext(),"Bluetooth discovery finished",Toast.LENGTH_SHORT).show();
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+            } else if(BluetoothLeConnectionService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                mCurrentlyConnectedTextView.setText("disconnected");
             }
+//            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+//
+//                // Discovery has found a device. Get the BluetoothDevice
+//                // object and its info from the Intent.
+//                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+//                if(device != null) {
+//                    String deviceName = device.getName();
+//                    String deviceHardwareAddress = device.getAddress(); // MAC address
+//                    Log.d(TAG, "device found: " + deviceName);
+//                    mAvailableDevicesArrayAdapter.add(deviceName + "\n" + deviceHardwareAddress);
+//                } else {
+//                    Toast.makeText(getApplicationContext(),"device is null",Toast.LENGTH_SHORT).show();
+//                }
+
+            // When discovery is finished
+//            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+//                // TODO: toast/text if no devices found
+//                // if (mNewDevicesArrayAdapter.getCount() == 0) {
+//
+//                Toast.makeText(getApplicationContext(),"Bluetooth discovery finished",Toast.LENGTH_SHORT).show();
+//            } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+//            }
         }
-    };*/
+    };
 
     private class LeDeviceListAdapter extends ArrayAdapter<BluetoothDevice> {
         private Context mContext;

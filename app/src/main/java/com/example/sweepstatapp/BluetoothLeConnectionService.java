@@ -49,6 +49,7 @@ public class BluetoothLeConnectionService extends Service {
     public final static String GATT_QUERY_RUNREADY =
             "com.example.sweepstat.le.GATT_QUERY_RUNREADY";
 
+    // These are Actions that this service will broadcast
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
@@ -184,10 +185,12 @@ public class BluetoothLeConnectionService extends Service {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
+                Intent intent = new Intent(intentAction);
+                intent.putExtra("address", mBluetoothDeviceAddress);
+                sendBroadcast(intent);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
-                Log.i(TAG, "Attempting to start service discovery: " +
-                        mBluetoothGatt.discoverServices());
+                Log.i(TAG, "Attempting to start service discovery: " + mBluetoothGatt.discoverServices());
 
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
