@@ -1,5 +1,9 @@
 package com.example.sweepstatapp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -157,8 +161,6 @@ public class Graph {
     }
 
     protected void addEntry(DataPoint data){
-//        if (!drawing)
-//            return;
         this.dataPoint = data;
         fullData.add(data);
         if (scaleFactor == -1000){
@@ -166,19 +168,6 @@ public class Graph {
             if (scaleFactor > 12)
                 scaleFactor = 12;
         }
-
-//        if(Math.abs(dataPoint.getX() - highVolt) < THRESHOLD) {
-//            reversed = true;
-//            backwardData = new ArrayList<>();
-//            negatedBackwardData = new ArrayList<>();
-//            backwardSeries = new LineGraphSeries<>();
-//        }
-//        if (Math.abs(dataPoint.getX() - lowVolt) < THRESHOLD) {
-//            reversed = false;
-//            forwardData = new ArrayList<>();
-//            negatedForwardData = new ArrayList<>();
-//            forwardSeries = new LineGraphSeries<>();
-//        }
 
         if(!reversed && dataPoint.getX() - lastX < 0) {
             reversed = true;
