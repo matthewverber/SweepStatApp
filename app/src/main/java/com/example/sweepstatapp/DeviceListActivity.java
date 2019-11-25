@@ -67,6 +67,7 @@ public class DeviceListActivity extends AppCompatActivity {
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBtAdapter = bluetoothManager.getAdapter();
 
+        // TODO: REMOVE THIS
         TextView tmp = findViewById(R.id.title_currently_connected);
         tmp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +83,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
         // Initialize textview for currently_connected
         mCurrentlyConnectedTextView = findViewById(R.id.currently_connected);
+        // TODO: REMOVE THIS
         mCurrentlyConnectedTextView.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -91,7 +93,7 @@ public class DeviceListActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.setAction(BluetoothLeConnectionService.GATT_WRITE_MESSAGE);
                     intent.setClass(getApplicationContext(), BluetoothLeConnectionService.class);
-                    intent.putExtra("message", "qwerty");
+                    intent.putExtra("message", ".");
                     startService(intent);
 
                 } catch (Exception e) {
@@ -132,7 +134,7 @@ public class DeviceListActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothLeConnectionService.ACTION_GATT_CONNECTED);
         filter.addAction(BluetoothLeConnectionService.ACTION_GATT_DISCONNECTED);
-        //filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        filter.addAction(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE);
         registerReceiver(mReceiver, filter);
 
         // Request permissions
@@ -275,6 +277,9 @@ public class DeviceListActivity extends AppCompatActivity {
 
             } else if(BluetoothLeConnectionService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mCurrentlyConnectedTextView.setText("disconnected");
+            } else if(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE.equals(action)) {
+                String data = intent.getStringExtra(BluetoothLeConnectionService.EXTRA_DATA);
+                Log.d(TAG, "mReceiver got data: " + data);
             }
 //            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 //
