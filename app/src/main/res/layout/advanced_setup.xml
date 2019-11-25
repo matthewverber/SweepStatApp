@@ -238,7 +238,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/v" />
             </LinearLayout>
-
+<!--
             <LinearLayout
                 android:id="@+id/QuietTimeGroup"
                 android:layout_width="match_parent"
@@ -267,7 +267,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/seconds" />
             </LinearLayout>
-
+-->
             <LinearLayout
                 android:id="@+id/SensitivityGroup"
                 android:layout_width="match_parent"

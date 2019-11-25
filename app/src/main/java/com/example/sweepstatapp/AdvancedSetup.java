@@ -19,7 +19,7 @@ public class AdvancedSetup extends AppCompatActivity {
 
     Button finish;
     Spinner sensitivity;
-    EditText initialVoltage, highVoltage, lowVoltage, finalVoltage, scanRate, sweepSegs, sampleInterval, quietTime;
+    EditText initialVoltage, highVoltage, lowVoltage, finalVoltage, scanRate, sweepSegs, sampleInterval;
     CheckBox isAutoSens, isFinalE, isAuxRecording;
     Boolean polarity;
 
@@ -40,7 +40,7 @@ public class AdvancedSetup extends AppCompatActivity {
         scanRate = findViewById(R.id.scanRate);
         sweepSegs = findViewById(R.id.sweepSegments);
         sampleInterval = findViewById(R.id.sampleInterval);
-        quietTime = findViewById(R.id.quietTime);
+//      quietTime = findViewById(R.id.quietTime);
         sensitivity = findViewById(R.id.sensitivity);
         isAutoSens = findViewById(R.id.isAutoSens);
         isFinalE = findViewById(R.id.isFinalE);
@@ -65,13 +65,13 @@ public class AdvancedSetup extends AppCompatActivity {
             String scanrate = (scanRate.getText().toString());
             String segments = (sweepSegs.getText().toString());
             String interval = (sampleInterval.getText().toString());
-            String quiettime = (quietTime.getText().toString());
+//          String quiettime = (quietTime.getText().toString());
             String sens = (sensitivity.getSelectedItem().toString());
             boolean isAuto = isAutoSens.isChecked();
             boolean isFinal = isFinalE.isChecked();
             boolean isAux = isAuxRecording.isChecked();
 
-            if (initialV.equals("") || highV.equals("") || lowV.equals("") || finalV.equals("") || scanrate.equals("") || segments.equals("") || interval.equals("") || quiettime.equals("")){
+            if (initialV.equals("") || highV.equals("") || lowV.equals("") || finalV.equals("") || scanrate.equals("") || segments.equals("") || interval.equals("") ){
                 throw new Exception("User did not define all parameters");
             }
             SharedPreferences saved = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
@@ -84,7 +84,7 @@ public class AdvancedSetup extends AppCompatActivity {
             saver.putString("scanRate", scanrate);
             saver.putString("scanSegments", segments);
             saver.putString("sampleInterval", interval);
-            saver.putString("quietTime", quiettime);
+//          saver.putString("quietTime", quiettime);
             saver.putString("sensitivity", sens);
             saver.putBoolean("isAutoSens", isAuto);
             saver.putBoolean("isFinalE", isFinal);
