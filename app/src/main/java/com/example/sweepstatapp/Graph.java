@@ -73,10 +73,14 @@ public class Graph {
 
     public void setHighVolt(double highVolt){
         this.highVolt = highVolt;
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(-1*highVolt);
     }
 
     public void setLowVolt(double lowVolt){
         this.lowVolt = lowVolt;
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMaxX(-1*lowVolt);
     }
 
     public boolean startDrawing(){
