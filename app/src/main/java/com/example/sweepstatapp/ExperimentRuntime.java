@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -64,10 +65,15 @@ public class ExperimentRuntime extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (BluetoothLeConnectionService.GATT_WRITE_MESSAGE.equals(action) && graph != null) {
+            if (BluetoothLeConnectionService.ACTION_DATA_AVAILABLE.equals(action) && graph != null) {
                 String[] data = intent.getStringExtra(BluetoothLeConnectionService.EXTRA_DATA).split(",");
-                graph.putData(Double.parseDouble(data[1].substring(data[1].indexOf(":")+1)), Double.parseDouble(data[2].substring(data[2].indexOf(":")+1, data[2].length()-1)));
-            } else if(BluetoothLeConnectionService.FINISH_DRAWING.equals(action) && graph != null){
+                double v = Double.parseDouble(data[1].substring(data[1].indexOf(":")+1));
+                double c = Double.parseDouble(data[2].substring(data[2].indexOf(":")+1, data[2].length()-1));
+                Log.d("EXPERIMENTRUNTIME", "received v: " + v);
+                Log.d("EXPERIMENTRUNTIME", "received c: " + c);
+
+                graph.putData(v, c);
+            } else if(BluetoothLeConnectionService.ACTION_MESSAGES_FINISHED.equals(action) && graph != null){
                 drawing = false;
             }
         }
