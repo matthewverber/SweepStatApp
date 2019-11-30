@@ -45,7 +45,6 @@ public class ExperimentRuntime extends AppCompatActivity {
     Boolean autoSens, finalE, auxRecord;
     String loadFailed = "Load failed!";
     double lowVolt, highVolt;
-    boolean drawing = false;
     String[][] parameters;
     private Graph graph = null;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -74,7 +73,7 @@ public class ExperimentRuntime extends AppCompatActivity {
 
                 graph.putData(v, c);
             } else if(BluetoothLeConnectionService.ACTION_MESSAGES_FINISHED.equals(action) && graph != null){
-                drawing = false;
+                graph.finishDrawing();
             }
         }
     };
@@ -90,8 +89,8 @@ public class ExperimentRuntime extends AppCompatActivity {
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
-        drawing = false;
         filter.addAction(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE);
+        filter.addAction(BluetoothLeConnectionService.ACTION_MESSAGES_FINISHED);
         registerReceiver(receiver, filter);
 
         GraphView graphView = findViewById(R.id.graph);
@@ -131,13 +130,13 @@ public class ExperimentRuntime extends AppCompatActivity {
                 String lowV = saved.getString(AdvancedSetup.LOW_VOLTAGE, loadFailed);
                 highVoltage.setText(highV);
                 lowVoltage.setText(lowV);
+                graph = new Graph(graphView);
                 if (!highV.equals("") && !lowV.equals("")) {
                     highVolt = Double.parseDouble(highV);
                     lowVolt = Double.parseDouble(lowV);
-                    graph = new Graph(graphView, lowVolt, highVolt);
-                } else
-                    graph = new Graph(graphView);
-
+                    graph.setHighVolt(highVolt);
+                    graph.setLowVolt(lowVolt);
+                }
                 finalVoltage.setText(saved.getString(AdvancedSetup.FINAL_VOLTAGE, loadFailed));
                 polarity.setText(saved.getString(AdvancedSetup.POLARITY_TOGGLE, loadFailed));
                 scanRate.setText(saved.getString(AdvancedSetup.SCAN_RATE, loadFailed));
@@ -165,14 +164,27 @@ public class ExperimentRuntime extends AppCompatActivity {
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){
 //           graph.drawOnFakeData();
-            if (drawing)
-                return;
-            drawing = true;
-            Intent intent = new Intent();
-            intent.setAction(BluetoothLeConnectionService.GATT_WRITE_MESSAGE);
-            intent.setClass(getApplicationContext(), BluetoothLeConnectionService.class);
-            intent.putExtra("message", ".");
-            startService(intent);
+           if (!graph.startDrawing())
+               return;
+           new Thread(new Runnable() {
+               @Override
+               public void run() {
+                   double offset = Math.random();
+                   for (double i = 0; i < 1; i+=0.1){
+                       Intent intent = new Intent(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE);
+                       intent.putExtra(BluetoothLeConnectionService.EXTRA_DATA, "{i:" + Math.round(i*10) + ",v:"+(i+offset)/2+",c:"+(i+offset)/2+"}");
+                       sendBroadcast(intent);
+                       try {
+                           Thread.sleep(100);
+                       }catch (InterruptedException e){
+                           e.printStackTrace();
+                       }
+                   }
+                   Intent intent = new Intent(BluetoothLeConnectionService.ACTION_MESSAGES_FINISHED);
+                   sendBroadcast(intent);
+               }
+           }).start();
+
         } else if (view.getId() == R.id.local){
             if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
                 return;
@@ -240,7 +252,11 @@ public class ExperimentRuntime extends AppCompatActivity {
             rowIndex += 2;
             Row row = sheet.getRow(rowIndex);
             GraphView graphView = findViewById(R.id.graph);
-            graph = new Graph(graphView, Double.parseDouble(lowVoltage.getText()+""), Double.parseDouble(highVoltage.getText()+""));
+            graph = new Graph(graphView);
+            if (highVoltage.getText()+"" != "" && lowVoltage.getText()+"" != ""){
+                graph.setHighVolt(Double.parseDouble(highVoltage.getText() + ""));
+                graph.setLowVolt(Double.parseDouble(lowVoltage.getText() + ""));
+            }
 //            while(row != null && !row.getCell(1).getStringCellValue().equals("")){
             while(row != null){
                 double x = row.getCell(0).getNumericCellValue();

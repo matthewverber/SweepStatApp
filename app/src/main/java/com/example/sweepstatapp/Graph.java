@@ -1,14 +1,13 @@
 package com.example.sweepstatapp;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.util.Log;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -29,13 +28,15 @@ public class Graph {
     private boolean reversed;
     private ArrayBlockingQueue<DataPoint> dataPoints;
     private int scaleFactor = -1000;
-    private double maxY, minY;
+    private double maxY, minY, maxX, minX;
     private double lastX = -1000;
 
     public Graph(final GraphView graph){
         this.graph = graph;
         drawing = false;
         reversed = false;
+        highVolt = -1000;
+        lowVolt = -1000;
         if (graph != null){
             forwardSeries = new LineGraphSeries<>();
             backwardSeries = new LineGraphSeries<>();
@@ -51,6 +52,7 @@ public class Graph {
             gridLabel.setHorizontalAxisTitle("Voltage");
             gridLabel.setVerticalAxisTitle("Current");
             gridLabel.setNumVerticalLabels(10);
+            gridLabel.setNumHorizontalLabels(5);
             gridLabel.setLabelFormatter(new DefaultLabelFormatter() {
                 @Override
                 public String formatLabel(double value, boolean isValueX) {
@@ -66,15 +68,52 @@ public class Graph {
                 }
             });
         }
+        graphInRealTime();
     }
 
-    public Graph(GraphView graph, double lowVolt, double highVolt){
-        this(graph);
-        graph.getViewport().setMaxX(-1*lowVolt);
-        graph.getViewport().setMinX(-1*highVolt);
+    public void setHighVolt(double highVolt){
         this.highVolt = highVolt;
+    }
+
+    public void setLowVolt(double lowVolt){
         this.lowVolt = lowVolt;
-        graphInRealTime();
+    }
+
+    public boolean startDrawing(){
+        if (drawing)
+            return false;
+        drawing = true;
+        lastX = -1000;
+        scaleFactor = -1000;
+        maxX = -1000;
+        minX = -1000;
+        maxY = -1000;
+        minY = -1000;
+        backwardData = new ArrayList<>();
+        reversed = false;
+        if (graph != null){
+            forwardSeries = new LineGraphSeries<>();
+            backwardSeries = new LineGraphSeries<>();
+            forwardData = new ArrayList<>();
+            negatedForwardData = new ArrayList<>();
+            negatedBackwardData = new ArrayList<>();
+            backwardData = new ArrayList<>();
+            graph.removeAllSeries();
+            graph.addSeries(forwardSeries);
+            graph.addSeries(backwardSeries);
+            dataPoints.clear();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void finishDrawing(){
+        drawing = false;
+    }
+
+    public boolean getDrawing(){
+        return drawing;
     }
 
     public void drawOnFakeData (){
@@ -143,13 +182,14 @@ public class Graph {
     }
 
     protected void graphInRealTime(){
-        new Thread(new Runnable() {
+        Thread graphThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while(true){
                     try {
                         DataPoint dp = dataPoints.take();
                         if (dp != null){
+                            Log.d("GRAPH", "Datapoint received: " + dp);
                             addEntry(dp);
                         }
                     } catch (InterruptedException e){
@@ -157,7 +197,9 @@ public class Graph {
                     }
                 }
             }
-        }).start();
+        });
+        graphThread.setName("GraphThread");
+        graphThread.start();
     }
 
     protected void addEntry(DataPoint data){
@@ -167,6 +209,24 @@ public class Graph {
             scaleFactor = (int)Math.log(1/dataPoint.getY());
             if (scaleFactor > 12)
                 scaleFactor = 12;
+        }
+        if (highVolt == -1000 || lowVolt == -1000) {
+            if (maxX == -1000) {
+                maxX = dataPoint.getX();
+                minX = dataPoint.getX();
+            }
+            if (dataPoint.getX() > maxX) {
+                maxX = dataPoint.getX();
+                graph.getViewport().setXAxisBoundsManual(true);
+                graph.getViewport().setMaxX(-1 * minX + 0.1);
+                graph.getViewport().setMinX(-1 * maxX - 0.1);
+            }
+            if (dataPoint.getX() < minX) {
+                minX = dataPoint.getX();
+                graph.getViewport().setXAxisBoundsManual(true);
+                graph.getViewport().setMaxX(-1 * minX + 0.1);
+                graph.getViewport().setMinX(-1 * maxX - 0.1);
+            }
         }
 
         if(!reversed && dataPoint.getX() - lastX < 0) {
