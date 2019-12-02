@@ -76,6 +76,11 @@ public class AdvancedSetup extends AppCompatActivity {
         isAuxRecording = findViewById(R.id.isAuxSignalRecording);
         polarity = true;
 
+        Bundle data = getIntent().getExtras();
+        if (data != null && data.getString("loadFile") != null){
+            String filePath = data.getString("loadFile");
+            loadData(filePath);
+        }
     }
 
     public void verifyEntries(View view){
