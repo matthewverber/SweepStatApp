@@ -70,7 +70,6 @@ public class AdvancedSetup extends AppCompatActivity {
         scanRate = findViewById(R.id.scanRate);
         sweepSegs = findViewById(R.id.sweepSegments);
         sampleInterval = findViewById(R.id.sampleInterval);
-//      quietTime = findViewById(R.id.quietTime);
         sensitivity = findViewById(R.id.sensitivity);
         isAutoSens = findViewById(R.id.isAutoSens);
         isFinalE = findViewById(R.id.isFinalE);
@@ -95,7 +94,6 @@ public class AdvancedSetup extends AppCompatActivity {
             String scanrate = (scanRate.getText().toString());
             String segments = (sweepSegs.getText().toString());
             String interval = (sampleInterval.getText().toString());
-//          String quiettime = (quietTime.getText().toString());
             String sens = (sensitivity.getSelectedItem().toString());
             boolean isAuto = isAutoSens.isChecked();
             boolean isFinal = isFinalE.isChecked();
@@ -114,7 +112,6 @@ public class AdvancedSetup extends AppCompatActivity {
             saver.putString(SCAN_RATE, scanrate);
             saver.putString(SWEEP_SEGS, segments);
             saver.putString(SAMPLE_INTEVAL, interval);
-            saver.putString(QUIET_TIME, quiettime);
             saver.putString(SENSITIVITY, sens);
             saver.putBoolean(IS_AUTOSENS, isAuto);
             saver.putBoolean(IS_FINALE, isFinal);
@@ -201,7 +198,7 @@ public class AdvancedSetup extends AppCompatActivity {
         Sheet sheet = wb.createSheet("data");
         Row row;
 
-        String[][] parameters = new String[2][13];
+        String[][] parameters = new String[2][12];
 
         parameters[0][0] = INITIAL_VOLTAGE;
         parameters[0][1] = HIGH_VOLTAGE;
@@ -211,11 +208,10 @@ public class AdvancedSetup extends AppCompatActivity {
         parameters[0][5] = SCAN_RATE;
         parameters[0][6] = SWEEP_SEGS;
         parameters[0][7] = SAMPLE_INTEVAL;
-        parameters[0][8] = QUIET_TIME;
-        parameters[0][9] = SENSITIVITY;
-        parameters[0][10] = IS_AUTOSENS;
-        parameters[0][11] = IS_FINALE;
-        parameters[0][12] = IS_AUX_RECORDING;
+        parameters[0][8] = SENSITIVITY;
+        parameters[0][9] = IS_AUTOSENS;
+        parameters[0][10] = IS_FINALE;
+        parameters[0][11] = IS_AUX_RECORDING;
 
         parameters[1][0] = initialVoltage.getText().toString();
         parameters[1][1] = highVoltage.getText().toString();
@@ -225,11 +221,10 @@ public class AdvancedSetup extends AppCompatActivity {
         parameters[1][5] = scanRate.getText().toString();
         parameters[1][6] = sweepSegs.getText().toString();
         parameters[1][7] = sampleInterval.getText().toString();
-        parameters[1][8] = quietTime.getText().toString();
-        parameters[1][9] = sensitivity.getSelectedItem().toString();
-        parameters[1][10] = isAutoSens.isChecked()+"";
-        parameters[1][11] = isFinalE.isChecked()+"";
-        parameters[1][12] = isAuxRecording.isChecked()+"";
+        parameters[1][8] = sensitivity.getSelectedItem().toString();
+        parameters[1][9] = isAutoSens.isChecked()+"";
+        parameters[1][10] = isFinalE.isChecked()+"";
+        parameters[1][11] = isAuxRecording.isChecked()+"";
 
         for (int i = 0; i < parameters[1].length; i++, nextRow++) {
             row = sheet.createRow(nextRow);
@@ -303,11 +298,9 @@ public class AdvancedSetup extends AppCompatActivity {
                 polarity = false;
             else
                 polarity = true;
-            polarityToggle.setChecked(polarity);
             scanRate.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sweepSegs.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sampleInterval.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
-            quietTime.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             String s = sheet.getRow(rowIndex++).getCell(1).getStringCellValue();
             for(int i= 0; i < sensitivity.getAdapter().getCount(); i++)
                 if(sensitivity.getAdapter().getItem(i).toString().equals(s))

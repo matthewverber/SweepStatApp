@@ -49,6 +49,7 @@ public class ExperimentRuntime extends AppCompatActivity {
     private int numOfPoints = 10;
     private long interval = 20;
     SharedPreferences saved;
+    static final String INITIAL_VOLTAGE = "INITIAL VOLTAGE";
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -145,7 +146,6 @@ public class ExperimentRuntime extends AppCompatActivity {
                 scanRate.setText(saved.getString(AdvancedSetup.SCAN_RATE, loadFailed));
                 sweepSegments.setText(saved.getString(AdvancedSetup.SWEEP_SEGS, loadFailed));
                 sampleInterval.setText(saved.getString(AdvancedSetup.SAMPLE_INTEVAL, loadFailed));
-                quietTime.setText(saved.getString(AdvancedSetup.QUIET_TIME, loadFailed));
                 sensitivity.setText(saved.getString(AdvancedSetup.SENSITIVITY, loadFailed));
                 autoSens = saved.getBoolean(AdvancedSetup.IS_AUTOSENS, false);
                 finalE = saved.getBoolean(AdvancedSetup.IS_FINALE, true);
@@ -188,13 +188,13 @@ public class ExperimentRuntime extends AppCompatActivity {
                }
            }).start();
 
-        } else if (view.getId() == R.id.local){
+        } else if (view.getId() == R.id.localSave){
             if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
                 return;
             verifyStoragePermissions(this);
             DATA_DIR.mkdirs();
             showEnterFileName(this, LOCAL);
-        } else if (view.getId() == R.id.export){
+        } else if (view.getId() == R.id.exportRes){
             if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
                 return;
             verifyStoragePermissions(this);
@@ -240,7 +240,6 @@ public class ExperimentRuntime extends AppCompatActivity {
             scanRate.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sweepSegments.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sampleInterval.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
-            quietTime.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sensitivity.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             autoSens = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             finalE = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
@@ -285,7 +284,7 @@ public class ExperimentRuntime extends AppCompatActivity {
     }
 
     private String[][] setParameters(){
-        parameters = new String[2][13];
+        parameters = new String[2][12];
         parameters[0][0] = AdvancedSetup.INITIAL_VOLTAGE;
         parameters[0][1] = AdvancedSetup.HIGH_VOLTAGE;
         parameters[0][2] = AdvancedSetup.LOW_VOLTAGE;
@@ -294,11 +293,10 @@ public class ExperimentRuntime extends AppCompatActivity {
         parameters[0][5] = AdvancedSetup.SCAN_RATE;
         parameters[0][6] = AdvancedSetup.SWEEP_SEGS;
         parameters[0][7] = AdvancedSetup.SAMPLE_INTEVAL;
-        parameters[0][8] = AdvancedSetup.QUIET_TIME;
-        parameters[0][9] = AdvancedSetup.SENSITIVITY;
-        parameters[0][10] = AdvancedSetup.IS_AUTOSENS;
-        parameters[0][11] = AdvancedSetup.IS_FINALE;
-        parameters[0][12] = AdvancedSetup.IS_AUX_RECORDING;
+        parameters[0][8] = AdvancedSetup.SENSITIVITY;
+        parameters[0][9] = AdvancedSetup.IS_AUTOSENS;
+        parameters[0][10] = AdvancedSetup.IS_FINALE;
+        parameters[0][11] = AdvancedSetup.IS_AUX_RECORDING;
 
         parameters[1][0] = initialVoltage.getText()+"";
         parameters[1][1] = highVoltage.getText()+"";
@@ -308,11 +306,10 @@ public class ExperimentRuntime extends AppCompatActivity {
         parameters[1][5] = scanRate.getText()+"";
         parameters[1][6] = sweepSegments.getText()+"";
         parameters[1][7] = sampleInterval.getText()+"";
-        parameters[1][8] = quietTime.getText()+"";
-        parameters[1][9] = sensitivity.getText()+"";
-        parameters[1][10] = autoSens+"";
-        parameters[1][11] = finalE+"";
-        parameters[1][12] = auxRecord+"";
+        parameters[1][8] = sensitivity.getText()+"";
+        parameters[1][9] = autoSens+"";
+        parameters[1][10] = finalE+"";
+        parameters[1][11] = auxRecord+"";
         return parameters;
     }
 
