@@ -330,7 +330,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:onClick="close"
-                    android:text="@string/go_home" />
+                    android:text="@string/go_home"
+                    android:textAllCaps="false" />
 
                 <Button
                     android:id="@+id/finishAdvanced"
@@ -339,7 +340,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:onClick="verifyEntries"
-                    android:text="@string/finish_setup" />
+                    android:text="@string/finish_setup"
+                    android:textAllCaps="false" />
 
             </LinearLayout>
 
