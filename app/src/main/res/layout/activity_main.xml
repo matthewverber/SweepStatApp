@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4B000000"
+    android:background="#BBF8F0"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/sweep_stat_app"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#000000"
@@ -22,7 +23,7 @@
         android:id="@+id/mainLogo"
         android:layout_width="197dp"
         android:layout_height="127dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/an_image_of_the_sweepstat_version_3_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,10 +38,11 @@
         android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/new_experiment"
+        android:textAllCaps="false"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainLogo" />
+        app:layout_constraintTop_toBottomOf="@+id/simpleSetup" />
 
     <Button
         android:id="@+id/loadConfig"
@@ -50,6 +52,7 @@
         android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/load_configuration"
+        android:textAllCaps="false"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
@@ -64,6 +67,7 @@
         android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/recent_results"
+        android:textAllCaps="false"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +81,7 @@
         android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/check_bluetooth_connection"
+        android:textAllCaps="false"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
@@ -87,25 +92,40 @@
         android:id="@+id/about"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
         android:onClick="onClick"
         android:text="@string/about"
-        app:layout_constraintBottom_toTopOf="@+id/credits"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ckBluetooth" />
 
     <Button
         android:id="@+id/credits"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
         android:onClick="onClick"
         android:text="@string/credits"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ckBluetooth" />
+
+    <Button
+        android:id="@+id/simpleSetup"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="onClick"
+        android:text="@string/simple_setup"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainLogo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

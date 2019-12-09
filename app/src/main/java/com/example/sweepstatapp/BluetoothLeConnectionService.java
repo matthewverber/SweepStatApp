@@ -60,11 +60,12 @@ public class BluetoothLeConnectionService extends Service {
             "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le.EXTRA_DATA";
+    public final static String ACTION_MESSAGES_FINISHED =
+            "com.example.bluetooth.le.ACTION_MESSAGES_FINISHED";
     public final static String RESULT_RUNREADY_STATE =
             "com.example.sweepstat.le.RESULT_RUNREADY_STATE";
 
     // This is the String message that comes from the Sweepstat. starts with { and ends with }
-    public String asdfbuilt_message;
     public StringBuilder built_message = new StringBuilder();
 
     // these are the relevant UUIDs for the HM-10 module
@@ -265,6 +266,10 @@ public class BluetoothLeConnectionService extends Service {
                 if(tmp ==  '}') { // end of data point; to broadcast data
                     final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
                     intent.putExtra(EXTRA_DATA, built_message.toString());
+                    sendBroadcast(intent);
+                }
+                if(tmp == '$') { // end of sending data messages. for now...
+                    final Intent intent = new Intent(ACTION_MESSAGES_FINISHED);
                     sendBroadcast(intent);
                 }
 
