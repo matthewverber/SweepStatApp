@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFBBF8F0"
@@ -256,65 +255,6 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/v"
-                    android:textColor="@android:color/black" />
-            </LinearLayout>
-<!--
-            <LinearLayout
-                android:id="@+id/QuietTimeGroup"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/quiTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/quiet_time" />
-
-                <EditText
-                    android:id="@+id/quietTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="5"
-                    android:fontFamily="sans-serif-medium"
-                    android:inputType="numberDecimal" />
-
-                <TextView
-                    android:id="@+id/sec"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/seconds" />
-            </LinearLayout>
--->
-            <LinearLayout
-                android:id="@+id/SensitivityGroup"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/sens"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/sensitivity"
-                    android:textColor="@android:color/black" />
-
-                <Spinner
-                    android:id="@+id/sensitivity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/sensitivity_options"
-                    android:prompt="@string/Sensitivity_prompt" />
-
-                <TextView
-                    android:id="@+id/amps_volts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/a_v"
                     android:textColor="@android:color/black" />
             </LinearLayout>
 

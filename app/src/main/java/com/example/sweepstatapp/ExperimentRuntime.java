@@ -40,7 +40,7 @@ import java.io.IOException;
 
 public class ExperimentRuntime extends AppCompatActivity {
     TextView initialVoltage, highVoltage, lowVoltage, finalVoltage, polarity, scanRate,
-    sampleInterval, sensitivity, sweepSegments;
+    sampleInterval, sweepSegments;
     Boolean autoSens, finalE, auxRecord;
     String loadFailed = "Not currently enabled";
     double lowVolt, highVolt;
@@ -69,13 +69,19 @@ public class ExperimentRuntime extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothLeConnectionService.ACTION_DATA_AVAILABLE.equals(action) && graph != null) {
-                String[] data = intent.getStringExtra(BluetoothLeConnectionService.EXTRA_DATA).split(",");
-                double v = Double.parseDouble(data[1].substring(data[1].indexOf(":")+1));
-                double c = Double.parseDouble(data[2].substring(data[2].indexOf(":")+1, data[2].length()-1));
-                Log.d("EXPERIMENTRUNTIME", "received v: " + v);
-                Log.d("EXPERIMENTRUNTIME", "received c: " + c);
-
-                graph.putData(v, c);
+                String[] data;
+                try {
+                    data = intent.getStringExtra(BluetoothLeConnectionService.EXTRA_DATA).split(",");
+                    double v = Double.parseDouble(data[1].substring(data[1].indexOf(":")+1));
+                    double c = Double.parseDouble(data[2].substring(data[2].indexOf(":")+1, data[2].length()-1));
+                    Log.d("EXPERIMENTRUNTIME", "received v: " + v);
+                    Log.d("EXPERIMENTRUNTIME", "received c: " + c);
+                    graph.putData(v, c);
+                } catch(NullPointerException e){
+                    e.printStackTrace();
+                    Toast.makeText(ExperimentRuntime.this, "Unable to receive data; NullPointerException!", Toast.LENGTH_SHORT).show();
+                }
+                
             } else if(BluetoothLeConnectionService.ACTION_MESSAGES_FINISHED.equals(action) && graph != null){
                 graph.finishDrawing();
             }
@@ -99,10 +105,6 @@ public class ExperimentRuntime extends AppCompatActivity {
 
         GraphView graphView = findViewById(R.id.graph);
         Viewport viewport = graphView.getViewport();
-//        viewport.setScrollable(true);
-//        viewport.setScrollableY(true);
-//        viewport.setScalable(true);
-//        viewport.setScalableY(true);
         viewport.setXAxisBoundsManual(true);
         viewport.setYAxisBoundsManual(true);
         viewport.setMinX(-1);
@@ -116,8 +118,6 @@ public class ExperimentRuntime extends AppCompatActivity {
         scanRate = findViewById(R.id.scanRate);
         sweepSegments = findViewById(R.id.sweepSegments);
         sampleInterval = findViewById(R.id.sampleInterval);
-//      quietTime = findViewById(R.id.quietTime);
-        sensitivity = findViewById(R.id.sensitivity);
         autoSens = false;
         finalE = false;
         auxRecord = false;
@@ -146,7 +146,6 @@ public class ExperimentRuntime extends AppCompatActivity {
                 scanRate.setText(saved.getString(AdvancedSetup.SCAN_RATE, loadFailed));
                 sweepSegments.setText(saved.getString(AdvancedSetup.SWEEP_SEGS, loadFailed));
                 sampleInterval.setText(saved.getString(AdvancedSetup.SAMPLE_INTEVAL, loadFailed));
-                sensitivity.setText(saved.getString(AdvancedSetup.SENSITIVITY, loadFailed));
                 autoSens = saved.getBoolean(AdvancedSetup.IS_AUTOSENS, false);
                 finalE = saved.getBoolean(AdvancedSetup.IS_FINALE, true);
                 auxRecord = saved.getBoolean(AdvancedSetup.IS_AUX_RECORDING, false);
@@ -166,7 +165,6 @@ public class ExperimentRuntime extends AppCompatActivity {
 
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){
-//           graph.drawOnFakeData();
            if (!graph.startDrawing())
                return;
            new Thread(new Runnable() {
@@ -240,7 +238,6 @@ public class ExperimentRuntime extends AppCompatActivity {
             scanRate.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sweepSegments.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sampleInterval.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
-            sensitivity.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             autoSens = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             finalE = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             auxRecord = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
@@ -255,14 +252,12 @@ public class ExperimentRuntime extends AppCompatActivity {
             Row row = sheet.getRow(rowIndex);
             GraphView graphView = findViewById(R.id.graph);
             graph = new Graph(graphView);
-            if (highVoltage.getText()+"" != "" && lowVoltage.getText()+"" != ""){
+            if ((!(highVoltage.getText()+"").equals("")) && !(lowVoltage.getText()+"").equals("")){
                 graph.setHighVolt(Double.parseDouble(highVoltage.getText() + ""));
                 graph.setLowVolt(Double.parseDouble(lowVoltage.getText() + ""));
             }
-//            while(row != null && !row.getCell(1).getStringCellValue().equals("")){
             while(row != null){
                 double x = row.getCell(0).getNumericCellValue();
-//                double y = Double.parseDouble(row.getCell(1).getStringCellValue());
                 double y = row.getCell(1).getNumericCellValue();
                 graph.putData(x,y);
                 rowIndex++;
@@ -306,7 +301,7 @@ public class ExperimentRuntime extends AppCompatActivity {
         parameters[1][5] = scanRate.getText()+"";
         parameters[1][6] = sweepSegments.getText()+"";
         parameters[1][7] = sampleInterval.getText()+"";
-        parameters[1][8] = sensitivity.getText()+"";
+        parameters[1][8] = "Not enabled in SweepStat V1.0";
         parameters[1][9] = autoSens+"";
         parameters[1][10] = finalE+"";
         parameters[1][11] = auxRecord+"";
@@ -403,7 +398,6 @@ public class ExperimentRuntime extends AppCompatActivity {
             c.setCellValue(voltage[i]);
             c = row.createCell(1);
             c.setCellValue(current[i]);
-//            c.setCellValue(String.format("%3.2E", current[i]));
         }
 
         sheet.setColumnWidth(0, 20*256);
@@ -445,13 +439,17 @@ public class ExperimentRuntime extends AppCompatActivity {
     }
 
     private void deleteDir(File dir) {
-        for (File file : dir.listFiles()) {
-            if (file.isDirectory()) {
-                deleteDir(file);
-                file.delete();
-            } else {
-                file.delete();
+        try {
+            for (File file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    deleteDir(file);
+                    file.delete();
+                } else {
+                    file.delete();
+                }
             }
+        } catch (NullPointerException e){
+            e.printStackTrace();
         }
     }
 

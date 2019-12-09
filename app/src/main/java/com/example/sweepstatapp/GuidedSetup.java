@@ -41,7 +41,6 @@ public class GuidedSetup extends AppCompatActivity {
         }
         saved = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
         saver = saved.edit();
-        //saver.clear();
     }
 
     public void onClick(View view){
@@ -125,15 +124,15 @@ public class GuidedSetup extends AppCompatActivity {
                 return;
             }
             else{
-                saver.putString(ExperimentRuntime.INITIAL_VOLTAGE, defined_initial_potential);
+                saver.putString("initialVoltage", defined_initial_potential);
                 saver.putString("highVoltage", defined_vertex_potential);
                 saver.putString("lowVoltage", defined_initial_potential);
                 saver.putString("finalVoltage", defined_initial_potential);
                 if(defined_initial_potential.contains("-")){
-                    saver.putString("polarity", "Negative");
+                    saver.putString("polarityToggle", "Negative");
                 }
                 else{
-                    saver.putString("polarity", "Positive");
+                    saver.putString("polarityToggle", "Positive");
                 }
                 saver.apply();
             }
@@ -163,7 +162,7 @@ public class GuidedSetup extends AppCompatActivity {
         }
 
         else if(selected == R.id.finalizeSimple){
-            saver.putString("scanSegments", "2");
+            saver.putString("sweepSegs", "2");
             saver.putString("quietTime", "Not Enabled");
             saver.putString("sampleInterval", "0.001");
             saver.apply();

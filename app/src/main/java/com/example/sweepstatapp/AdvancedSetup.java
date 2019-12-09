@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,7 +32,6 @@ import java.io.IOException;
 public class AdvancedSetup extends AppCompatActivity {
 
     Button finish;
-    Spinner sensitivity;
     EditText initialVoltage, highVoltage, lowVoltage, finalVoltage, scanRate, sweepSegs, sampleInterval;
     CheckBox isAutoSens, isFinalE, isAuxRecording;
     Boolean polarity;
@@ -47,7 +45,6 @@ public class AdvancedSetup extends AppCompatActivity {
     public static final String SCAN_RATE = "scanRate";
     public static final String SWEEP_SEGS = "sweepSegs";
     public static final String SAMPLE_INTEVAL = "sampleInterval";
-    public static final String QUIET_TIME = "quietTime";
     public static final String SENSITIVITY = "sensitivity";
     public static final String IS_AUTOSENS = "isAutoSens";
     public static final String IS_FINALE = "isFinalE";
@@ -72,7 +69,6 @@ public class AdvancedSetup extends AppCompatActivity {
         scanRate = findViewById(R.id.scanRate);
         sweepSegs = findViewById(R.id.sweepSegments);
         sampleInterval = findViewById(R.id.sampleInterval);
-        sensitivity = findViewById(R.id.sensitivity);
         isAutoSens = findViewById(R.id.isAutoSens);
         isFinalE = findViewById(R.id.isFinalE);
         isAuxRecording = findViewById(R.id.isAuxSignalRecording);
@@ -101,7 +97,7 @@ public class AdvancedSetup extends AppCompatActivity {
             String scanrate = (scanRate.getText().toString());
             String segments = (sweepSegs.getText().toString());
             String interval = (sampleInterval.getText().toString());
-            String sens = (sensitivity.getSelectedItem().toString());
+            String sens = "Not enabled with SweepStat V1.0";
             boolean isAuto = isAutoSens.isChecked();
             boolean isFinal = isFinalE.isChecked();
             boolean isAux = isAuxRecording.isChecked();
@@ -235,7 +231,7 @@ public class AdvancedSetup extends AppCompatActivity {
         parameters[1][5] = scanRate.getText().toString();
         parameters[1][6] = sweepSegs.getText().toString();
         parameters[1][7] = sampleInterval.getText().toString();
-        parameters[1][8] = sensitivity.getSelectedItem().toString();
+        parameters[1][8] = "Not enabled in SweepStat V1.0";
         parameters[1][9] = isAutoSens.isChecked()+"";
         parameters[1][10] = isFinalE.isChecked()+"";
         parameters[1][11] = isAuxRecording.isChecked()+"";
@@ -286,13 +282,17 @@ public class AdvancedSetup extends AppCompatActivity {
     }
 
     private void deleteDir(File dir) {
-        for (File file : dir.listFiles()) {
-            if (file.isDirectory()) {
-                deleteDir(file);
-                file.delete();
-            } else {
-                file.delete();
+        try {
+            for (File file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    deleteDir(file);
+                    file.delete();
+                } else {
+                    file.delete();
+                }
             }
+        } catch(NullPointerException e){
+            e.printStackTrace();
         }
     }
 
@@ -317,9 +317,6 @@ public class AdvancedSetup extends AppCompatActivity {
             sweepSegs.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sampleInterval.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             String s = sheet.getRow(rowIndex++).getCell(1).getStringCellValue();
-            for(int i= 0; i < sensitivity.getAdapter().getCount(); i++)
-                if(sensitivity.getAdapter().getItem(i).toString().equals(s))
-                    sensitivity.setSelection(i);
             isAutoSens.setChecked(Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue()));
             isFinalE.setChecked(Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue()));
             isAuxRecording.setChecked(Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue()));
