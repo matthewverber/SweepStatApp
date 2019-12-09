@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         int id = view.getId();
 
         if(id == R.id.newExperiment){
-            // First, set view to setup -- currently only implementing advanced setup
             Intent setup_advanced = new Intent(this, AdvancedSetup.class);
             startActivity(setup_advanced);
         }
@@ -77,12 +76,7 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.simpleSetup){
             Intent guided_setup = new Intent(this, GuidedSetup.class);
             startActivity(guided_setup);
-
         }
-        else if(id == R.id.simpleSetup){
-            Intent guided_setup = new Intent(this, GuidedSetup.class);
-            startActivity(guided_setup);
 
-        }
     }
 }
