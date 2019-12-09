@@ -238,6 +238,7 @@ public class ExperimentRuntime extends AppCompatActivity {
             scanRate.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sweepSegments.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sampleInterval.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
+            rowIndex++;
             autoSens = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             finalE = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             auxRecord = Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());

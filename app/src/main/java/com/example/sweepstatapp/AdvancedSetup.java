@@ -316,7 +316,7 @@ public class AdvancedSetup extends AppCompatActivity {
             scanRate.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sweepSegs.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
             sampleInterval.setText(sheet.getRow(rowIndex++).getCell(1).getStringCellValue());
-            String s = sheet.getRow(rowIndex++).getCell(1).getStringCellValue();
+            rowIndex++;
             isAutoSens.setChecked(Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue()));
             isFinalE.setChecked(Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue()));
             isAuxRecording.setChecked(Boolean.parseBoolean(sheet.getRow(rowIndex++).getCell(1).getStringCellValue()));
