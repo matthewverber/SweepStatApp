@@ -79,5 +79,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(guided_setup);
 
         }
+        else if(id == R.id.simpleSetup){
+            Intent guided_setup = new Intent(this, GuidedSetup.class);
+            startActivity(guided_setup);
+
+        }
     }
 }
