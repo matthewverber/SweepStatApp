@@ -470,6 +470,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
+
                 <Button
                     android:id="@+id/localSave"
                     style="@style/Widget.AppCompat.Button.Colored"
@@ -478,7 +479,9 @@
                     android:layout_weight="1"
                     android:clickable="false"
                     android:text="@string/save_locally"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:onClick="onClick"
+                    />
 
                 <Button
                     android:id="@+id/exportRes"
@@ -489,7 +492,9 @@
                     android:clickable="false"
                     android:text="@string/export"
                     android:textAllCaps="false"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:onClick="onClick"
+                    />
             </LinearLayout>
 
         </LinearLayout>

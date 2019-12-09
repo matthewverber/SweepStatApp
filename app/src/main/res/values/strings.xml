@@ -85,13 +85,4 @@
 
     <string name="title_available_devices">Available Devices</string>
 
-    <string name="privacy_policy">This application and the SweepStat team do not collect any user data. All workings of the application are local to your device, and the only permissions required to run the application are user location and Bluetooth management. These permissions are only used to allow the Bluetooth LE interface to run as specified for the SweepStat, and no data is uploaded to any locations online. Per your direction as the end user, some data may be uploaded to cloud locations in the form of your experiment results. You, as the end user, have total control over where these results are uploaded to. No copies of this data are saved anywhere other than as specified by you. The only user data collected in the process of acquiring and using this application is any user data collected by the Google Play Store, which is subject to the Google Play Store privacy policy.</string>
-    <string name="credits_page_1">This app was created by Team Q of the COMP 523, Software Engineering Lab course offered during the Fall semester of 2019 at the University of Chapel Hill. The website documenting the Q Team\'s efforts can be found at:</string>
-    <string name="credits_page_2">Eric Xin. ericxin@live.unc.edu</string>
-    <string name="credits_page_3">Ken Liu. yiwk321@live.unc.edu</string>
-    <string name="credits_page_4">Amadeus Skoczek. amadeush@live.unc.edu</string>
-    <string name="site_link"><a href="http://sweepstatapp.web.unc.edu">http://sweepstatapp.web.unc.edu</a></string>
-    <string name="credits_intro">Members of the Q Team were as follows:</string>
-    <string name="sweepstat_logo">SweepStat Logo</string>
-    <string name="privacy_button">Privacy Policy</string>
 </resources>

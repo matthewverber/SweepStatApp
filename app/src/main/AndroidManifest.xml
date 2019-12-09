@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sweepstatapp">
-<uses-feature android:name="android.hardware.bluetooth" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <uses-feature android:name="android.hardware.bluetooth" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,8 +18,9 @@
         android:roundIcon="@drawable/sweeplogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".LoadConfiguration"></activity>
+        <activity android:name=".LoadData" />
         <activity android:name=".DeviceListActivity"></activity>
-        <activity android:name=".Graph"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +30,15 @@
         <activity android:name=".AdvancedSetup"/>
         <activity android:name=".GuidedSetup"/>
         <activity android:name=".ExperimentRuntime"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.sweepstatapp.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
         <service android:name=".BluetoothLeConnectionService"/>
 
     </application>
