@@ -7,28 +7,16 @@
     android:background="#BBF8F0"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/sweep_stat_app"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/mainLogo"
         android:layout_width="197dp"
         android:layout_height="127dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:contentDescription="@string/an_image_of_the_sweepstat_version_3_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:srcCompat="@drawable/sweepstat" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sweeplogo" />
 
     <Button
         android:id="@+id/newExperiment"
@@ -47,57 +35,44 @@
     <Button
         android:id="@+id/loadConfig"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="158dp"
-        android:layout_height="38dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/load_configuration"
         android:textAllCaps="false"
-        android:textSize="12sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newExperiment" />
 
     <Button
-        android:id="@+id/recentResults"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="136dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="8dp"
-        android:onClick="onClick"
-        android:text="@string/recent_results"
-        android:textAllCaps="false"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loadConfig" />
-
-    <Button
         android:id="@+id/ckBluetooth"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="223dp"
-        android:layout_height="38dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/check_bluetooth_connection"
         android:textAllCaps="false"
-        android:textSize="12sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recentResults" />
+        app:layout_constraintTop_toBottomOf="@+id/loadConfig" />
 
     <Button
-        android:id="@+id/about"
+        android:id="@+id/privacyPolicy"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="64dp"
         android:onClick="onClick"
-        android:text="@string/about"
+        android:text="@string/privacy_button"
         android:textAllCaps="false"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ckBluetooth" />
 
@@ -106,11 +81,12 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="16dp"
         android:onClick="onClick"
         android:text="@string/credits"
         android:textAllCaps="false"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ckBluetooth" />
 

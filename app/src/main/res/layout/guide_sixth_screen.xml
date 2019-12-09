@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:scrollbars="vertical">
 
-    <ImageView
+        <ImageView
         android:id="@+id/logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -84,6 +84,21 @@
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/electrodes" />
+
+        <Button
+            android:id="@+id/goHome"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:onClick="onClick"
+            android:text="@string/go_home"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/nextButtonScreen6"
+            app:layout_constraintStart_toEndOf="@+id/backButtonScreen6"
             app:layout_constraintTop_toBottomOf="@+id/electrodes" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
