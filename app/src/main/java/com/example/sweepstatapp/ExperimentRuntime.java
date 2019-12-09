@@ -328,8 +328,10 @@ public class ExperimentRuntime extends AppCompatActivity {
                         String fileName = String.valueOf(fileNameEditText.getText());
                         File file = null;
                         if (action == LOCAL){
-                            if (fileName == null || fileName.equals(""))
+                            if (fileName == null || fileName.equals("")) {
+                                Toast.makeText(ExperimentRuntime.this, "File name cannot be empty", Toast.LENGTH_SHORT).show();
                                 return;
+                            }
 
                             file = new File(DATA_DIR, fileName + ".xls");
                             if (file.exists()){
@@ -417,6 +419,7 @@ public class ExperimentRuntime extends AppCompatActivity {
                 os.close();
                 wb.close();
                 retVal = file;
+                Toast.makeText(this, "Results saved in " + file.getName() + " at Documents/SweepStat/Data", Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -436,6 +439,7 @@ public class ExperimentRuntime extends AppCompatActivity {
             emailIntent.putExtra(Intent.EXTRA_STREAM, path);
             emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(Intent.createChooser(emailIntent, "Choose where to export"));
+
         }
         return retVal;
     }

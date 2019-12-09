@@ -120,6 +120,9 @@ public class GuidedSetup extends AppCompatActivity {
             if(defined_initial_potential.equals("") || defined_vertex_potential.equals("")){
                 Toast.makeText(this, "Please make entries for both potentials!", Toast.LENGTH_SHORT).show();
                 return;
+            } else if (Double.parseDouble(defined_initial_potential) >= Double.parseDouble(defined_vertex_potential)){
+                Toast.makeText(this, "Initial potential must be lower than vertex potential", Toast.LENGTH_SHORT).show();
+                return;
             }
             else{
                 saver.putString(ExperimentRuntime.INITIAL_VOLTAGE, defined_initial_potential);

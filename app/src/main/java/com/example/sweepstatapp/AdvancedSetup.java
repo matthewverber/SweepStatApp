@@ -52,6 +52,8 @@ public class AdvancedSetup extends AppCompatActivity {
     public static final String IS_AUTOSENS = "isAutoSens";
     public static final String IS_FINALE = "isFinalE";
     public static final String IS_AUX_RECORDING = "isAuxRecording";
+    private static final String PARAMETER_MISSING_EXCEPTION = "User did not define all parameters";
+    private static final String LOWV_HIGHER_THAN_HIGHV_EXCEPTION = "Low voltage is higher than high voltage";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,7 +107,9 @@ public class AdvancedSetup extends AppCompatActivity {
             boolean isAux = isAuxRecording.isChecked();
 
             if (initialV.equals("") || highV.equals("") || lowV.equals("") || finalV.equals("") || scanrate.equals("") || segments.equals("") || interval.equals("") ){
-                throw new Exception("User did not define all parameters");
+                throw new Exception(PARAMETER_MISSING_EXCEPTION);
+            } else if (Double.parseDouble(lowV) >= Double.parseDouble(highV)) {
+                throw new Exception(LOWV_HIGHER_THAN_HIGHV_EXCEPTION);
             }
             SharedPreferences saved = this.getSharedPreferences("com.example.sweepstatapp", Context.MODE_PRIVATE);
             SharedPreferences.Editor saver = saved.edit();
@@ -127,7 +131,10 @@ public class AdvancedSetup extends AppCompatActivity {
 
         } catch (Exception e){
             e.printStackTrace();
-            Toast.makeText(this, "Please make entries for all parameters!", Toast.LENGTH_SHORT).show();
+            if (e.getMessage().equals(LOWV_HIGHER_THAN_HIGHV_EXCEPTION))
+                Toast.makeText(this, "Low voltage must be lower than high voltage", Toast.LENGTH_SHORT).show();
+            else if (e.getMessage().equals(PARAMETER_MISSING_EXCEPTION))
+                Toast.makeText(this, "Please make entries for all parameters!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -162,8 +169,10 @@ public class AdvancedSetup extends AppCompatActivity {
                         String fileName = String.valueOf(fileNameEditText.getText());
                         File file = null;
                         if (action == ExperimentRuntime.LOCAL){
-                            if (fileName == null || fileName.equals(""))
+                            if (fileName == null || fileName.equals("")){
+                                Toast.makeText(AdvancedSetup.this, "File name cannot be empty", Toast.LENGTH_SHORT).show();
                                 return;
+                            }
 
                             file = new File(CONFIGURATION_DIR, fileName + ".xls");
                             if (file.exists()){
@@ -252,6 +261,7 @@ public class AdvancedSetup extends AppCompatActivity {
                 os.close();
                 wb.close();
                 retVal = file;
+                Toast.makeText(this, "Results saved in " + file.getName() + " at Documents/SweepStat/Configuration", Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e){
             e.printStackTrace();

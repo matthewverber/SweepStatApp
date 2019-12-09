@@ -40,6 +40,7 @@ public class LoadConfiguration extends AppCompatActivity {
                             Intent setup = new Intent(LoadConfiguration.this, AdvancedSetup.class);
                             setup.putExtra("loadFile", fileName + ".xls");
                             startActivity(setup);
+                            LoadConfiguration.this.finish();
                         }
                     });
                     buttonLayout.addView(button, p);
