@@ -46,10 +46,7 @@ public class ExperimentRuntime extends AppCompatActivity {
     double lowVolt, highVolt;
     String[][] parameters;
     private Graph graph = null;
-    private int numOfPoints = 10;
-    private long interval = 20;
     SharedPreferences saved;
-    static final String INITIAL_VOLTAGE = "INITIAL VOLTAGE";
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -155,6 +152,14 @@ public class ExperimentRuntime extends AppCompatActivity {
                     findViewById(R.id.finalEEnabled).setVisibility(View.VISIBLE);
                 if (auxRecord)
                     findViewById(R.id.auxRecordingEnabled).setVisibility(View.VISIBLE);
+                String referenceElectrode = saved.getString("Reference_Electrode", loadFailed);
+                if (referenceElectrode.equals(loadFailed)) {
+                    graphView.getGridLabelRenderer().setHorizontalAxisTitle("Potential (V)");
+                    graphView.getGridLabelRenderer().setVerticalAxisTitle("Current (A)");
+                } else {
+                    graphView.getGridLabelRenderer().setHorizontalAxisTitle("Potential (V vs " + referenceElectrode + ")");
+                    graphView.getGridLabelRenderer().setVerticalAxisTitle("Current (A)");
+                }
                 setParameters();
             } else {
                 Toast.makeText(this, "Failed to load saved inputs!", Toast.LENGTH_SHORT).show();
@@ -167,6 +172,7 @@ public class ExperimentRuntime extends AppCompatActivity {
         if (view.getId() == R.id.runExperiment){
            if (!graph.startDrawing())
                return;
+
 //            Intent intent = new Intent(BluetoothLeConnectionService.GATT_WRITE_MESSAGE);
 //            intent.putExtra("message", ".");
 //            sendBroadcast(intent);

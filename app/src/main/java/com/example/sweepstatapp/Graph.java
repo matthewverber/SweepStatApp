@@ -49,8 +49,8 @@ public class Graph {
             graph.addSeries(backwardSeries);
             dataPoints = new ArrayBlockingQueue<>(10);
             GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
-            gridLabel.setHorizontalAxisTitle("Voltage");
-            gridLabel.setVerticalAxisTitle("Current");
+//            gridLabel.setHorizontalAxisTitle("Potential (V vs " + " " + ")");
+//            gridLabel.setVerticalAxisTitle("Current (A)");
             gridLabel.setNumVerticalLabels(10);
             gridLabel.setNumHorizontalLabels(5);
             gridLabel.setLabelFormatter(new DefaultLabelFormatter() {
