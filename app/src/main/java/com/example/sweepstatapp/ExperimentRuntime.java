@@ -170,40 +170,47 @@ public class ExperimentRuntime extends AppCompatActivity {
 
     public void onClick(View view){
         if (view.getId() == R.id.runExperiment){
-           if (!graph.startDrawing())
-               return;
+            Log.d("ExpRun", "before");
 
+            if (!graph.startDrawing())
+               return;
+            Log.d("ExpRun", "after");
+
+// MDV Uncommented next 3 lines
 //            Intent intent = new Intent(BluetoothLeConnectionService.GATT_WRITE_MESSAGE);
 //            intent.putExtra("message", ".");
-//            sendBroadcast(intent);
-
-            new Thread(new Runnable() {
-               @Override
-               public void run() {
-                   for (double i = lowVolt; i <= highVolt; i+=0.02){
-                       Intent intent = new Intent(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE);
-                       intent.putExtra(BluetoothLeConnectionService.EXTRA_DATA, "{i:" + Math.round(i*50) + ",v:"+ i +",c:"+Math.sin(5*i)+"}");
-                       sendBroadcast(intent);
-                       try {
-                           Thread.sleep(20);
-                       }catch (InterruptedException e){
-                           e.printStackTrace();
-                       }
-                   }
-                   for (double i = highVolt-0.02; i > lowVolt; i-=0.02){
-                       Intent intent = new Intent(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE);
-                       intent.putExtra(BluetoothLeConnectionService.EXTRA_DATA, "{i:" + (2*highVolt/0.02-Math.round(i*50)) + ",v:"+ i +",c:"+Math.sin(-5*i)+"}");
-                       sendBroadcast(intent);
-                       try {
-                           Thread.sleep(20);
-                       }catch (InterruptedException e){
-                           e.printStackTrace();
-                       }
-                   }
-                   Intent intent = new Intent(BluetoothLeConnectionService.ACTION_MESSAGES_FINISHED);
-                   sendBroadcast(intent);
-               }
-           }).start();
+//            startService(intent);
+            Intent intent = new Intent(this, BluetoothLeConnectionService.class);
+            intent.setAction(BluetoothLeConnectionService.GATT_WRITE_MESSAGE);
+            intent.putExtra("message", ".");
+            startService(intent);
+//            new Thread(new Runnable() {
+//               @Override
+//               public void run() {
+//                   for (double i = lowVolt; i <= highVolt; i+=0.02){
+//                       Intent intent = new Intent(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE);
+//                       intent.putExtra(BluetoothLeConnectionService.EXTRA_DATA, "{i:" + Math.round(i*50) + ",v:"+ i +",c:"+Math.sin(5*i)+"}");
+//                       sendBroadcast(intent);
+//                       try {
+//                           Thread.sleep(20);
+//                       }catch (InterruptedException e){
+//                           e.printStackTrace();
+//                       }
+//                   }
+//                   for (double i = highVolt-0.02; i > lowVolt; i-=0.02){
+//                       Intent intent = new Intent(BluetoothLeConnectionService.ACTION_DATA_AVAILABLE);
+//                       intent.putExtra(BluetoothLeConnectionService.EXTRA_DATA, "{i:" + (2*highVolt/0.02-Math.round(i*50)) + ",v:"+ i +",c:"+Math.sin(-5*i)+"}");
+//                       sendBroadcast(intent);
+//                       try {
+//                           Thread.sleep(20);
+//                       }catch (InterruptedException e){
+//                           e.printStackTrace();
+//                       }
+//                   }
+//                   Intent intent = new Intent(BluetoothLeConnectionService.ACTION_MESSAGES_FINISHED);
+//                   sendBroadcast(intent);
+//               }
+//           }).start();
 
         } else if (view.getId() == R.id.localSave){
             if (!isExternalStorageAvailable() || isExternalStorageReadOnly())
